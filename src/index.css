@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-bodyColor text-white font-sans;
+  padding: 50px;
+   overflow-x: hidden;
+}
