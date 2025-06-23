@@ -3,13 +3,8 @@ import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react'
 export default function Footer() {
   return (
     <footer className="">
-      {/* 🔼 Top Border */}
       <div className="w-full border-t border-gray-700 mb-10" />
-
-      {/* 🧱 Main Footer Content */}
       <div className="mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 max-w-7xl">
-
-        {/* 🟢 Logo + Intro */}
         <div className="flex flex-col gap-4">
           <h1 className="text-subHeading font-bold text-green">TheSolarHome</h1>
           <p className="text-Para text-white">
@@ -17,7 +12,6 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* 🔗 Quick Links */}
         <div>
           <h3 className="text-subHeading font-semibold mb-4">Quick Links</h3>
           <ul className="space-y-2 text-sm ">
@@ -28,7 +22,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* 📞 Contact */}
         <div>
           <h3 className="text-subHeading font-semibold mb-4">Contact</h3>
           <ul className="space-y-3 text-sm ">
@@ -38,7 +31,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* 🌐 Social Media */}
+
         <div>
           <h3 className="text-subHeading font-semibold mb-4">Follow Us</h3>
           <div className="flex gap-4 text-white">

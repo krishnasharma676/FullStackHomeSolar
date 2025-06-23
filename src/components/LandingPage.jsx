@@ -4,7 +4,7 @@ import solarBuilding from '../assets/images/solar.gif';
 import { animateLandingPage } from '../Animations/landingPageAnimation'
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
-export default function LandingPage() {
+export default function LandingPage({openModal}) {
   const [loading, setLoading] = useState(false);
 
   const containerRef = useRef(null);
@@ -77,7 +77,10 @@ export default function LandingPage() {
               by turning confusion into clarity, guiding you at every step of the way
             </p>
 
-            <button className="w-fit bg-yellow text-black font-bold px-6 py-4 rounded-full text-Para hover:bg-white hover:text-black transition">
+            <button
+              className="w-fit bg-yellow text-black font-bold px-6 py-4 rounded-full text-Para hover:bg-white hover:text-black transition"
+              onClick={openModal}
+            >
               Get Your Free Solar Savings Report
             </button>
           </div>
