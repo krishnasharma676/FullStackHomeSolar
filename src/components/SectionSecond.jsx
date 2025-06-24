@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger);
 export default function SectionSecond() {
   const [loading, setLoading] = useState(false);
 
-  // Refs for animation
   const sectionRef = useRef();
   const headingRef = useRef();
   const para1Ref = useRef();
@@ -18,7 +17,6 @@ export default function SectionSecond() {
   const buttonRef = useRef();
   const imageRef = useRef();
 
-  // Animate on scroll in/out
   useEffect(() => {
     const ctx = gsap.context(() => {
       const elements = [
@@ -34,18 +32,18 @@ export default function SectionSecond() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top 80%',
-          toggleActions: 'play reverse play reverse',
+          toggleActions: 'play none none reverse',
         },
         opacity: 0,
         y: 30,
-        scale: 0.95,
+        scale: 0.97,
         duration: 0.5,
         stagger: 0.15,
         ease: 'power2.out',
       });
     }, sectionRef);
 
-    return () => ctx.revert(); // Cleanup on unmount
+    return () => ctx.revert();
   }, []);
 
   const handleClick = async () => {
@@ -64,64 +62,61 @@ export default function SectionSecond() {
   };
 
   return (
-    <div className=" relative z-20 flex py-[40px] flex-col z-20 gap-10 min-w-screen" ref={sectionRef}>
-      <div className="max-w-[1200px] w-full mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-[0.5fr_1.8fr] gap-12">
-          {/* Left Content */}
-          <div className="flex flex-col gap-10 items-center justify-start">
-            <h1
-              ref={headingRef}
-              className="text-heading font-bold text-center leading-[1.3]"
-            >
-              Can <br />
-              <span className="text-green">
-                Solar <br />
-                Work <br />
-              </span>
-              For You?
-            </h1>
-          </div>
+    <section
+      ref={sectionRef}
+      className="relative z-20 min-h-screen flex items-center justify-center px-4 py-20"
+    >
+      <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* Left Side Image */}
+        <div className="flex justify-center">
+          <img
+            ref={imageRef}
+            src={solarBuilding}
+            alt="Solar Building"
+            className="w-full max-w-md lg:max-w-lg object-contain drop-shadow-lg"
+          />
+        </div>
 
-          {/* Right Content */}
-          <div className="flex flex-col gap-5">
-            <p
-              ref={para1Ref}
-              className="text-Para leading-[40px] text-white"
-            >
-              We help homeowners and businesses like yours, confidently transition to solar,
-              by turning confusion into clarity, guiding you at every step of the way
-            </p>
-            <span
-              ref={spanRef}
-              className="text-green  text-Para font-bold"
-            >
-              You Are Not Alone
-            </span>
-            <p
-              ref={para2Ref}
-              className="text-Para leading-[40px] text-white"
-            >
-              We Invite You To Take A Free And Fact Based Assessment
-            </p>
-            <button
-              ref={buttonRef}
-              className="w-fit bg-yellow font-bold px-6 py-4 rounded-full text-para hover:bg-white hover:text-black transition"
-              onClick={handleClick}
-              disabled={loading}
-            >
-              {loading ? 'Loading...' : 'Click Here To Find Out How?'}
-            </button>
-          </div>
+        {/* Right Side Content */}
+        <div className="flex flex-col gap-6 text-white">
+          <h2
+            ref={headingRef}
+            className="text-4xl md:text-5xl font-bold leading-tight"
+          >
+            Is Solar <span className="text-green">Work</span> For You ?
+          </h2>
+
+          <p
+            ref={para1Ref}
+            className="text-lg leading-relaxed text-white/90"
+          >
+            We help homeowners and businesses confidently transition to clean energy — with zero confusion, only clarity.
+          </p>
+
+          <span
+            ref={spanRef}
+            className="text-yellow text-lg font-semibold uppercase tracking-wider"
+          >
+            Let’s Find Out Together
+          </span>
+
+          <p
+            ref={para2Ref}
+            className="text-lg leading-relaxed text-white/90"
+          >
+            Take a free, no-obligation assessment to see if solar is right for you.
+          </p>
+
+          <button
+            ref={buttonRef}
+            onClick={handleClick}
+            disabled={loading}
+            className="mt-2 bg-yellow text-black font-bold px-6 py-3 rounded-full w-fit hover:bg-white hover:text-black transition-all duration-300"
+          >
+            {loading ? 'Loading...' : 'Get My Free Assessment'}
+          </button>
         </div>
       </div>
-
-      {/* Bottom Image */}
-      <img
-        ref={imageRef}
-        src={solarBuilding}
-        alt="Solar Building"
-        className="max-w-full h-auto"
-      />
-    </div>
+    </section>
   );
 }

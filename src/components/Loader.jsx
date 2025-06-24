@@ -51,7 +51,7 @@ export default function PageLoader({ onFinish }) {
   }, [onFinish]);
 
   // Title string
-  const title = 'THE SOLAR HOME';
+  const title = 'TheSolarHome';
 
   return (
     <div

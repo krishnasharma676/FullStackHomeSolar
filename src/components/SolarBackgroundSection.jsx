@@ -16,7 +16,7 @@ export default function SolarBackgroundSection() {
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0" />
 
       {/* Text Content */}
-      <div className="relative  max-w-2xl w-full flex flex-col gap-6">
+      <div className="relative max-h-screen  max-w-2xl w-full flex flex-col gap-6">
         <h2 className="text-white text-3xl md:text-4xl font-bold">
           Let’s Solarize India, One Home at a Time
         </h2>

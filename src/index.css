@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 body {
-  @apply bg-bodyColor text-white font-sans;
+  @apply bg-bodyColor text-white;
   padding: 50px;
    overflow-x: hidden;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+*{
+  /* @apply  font-sans; */
+  /* @apply font-roboto; */
+  @apply font-lexend;
 }

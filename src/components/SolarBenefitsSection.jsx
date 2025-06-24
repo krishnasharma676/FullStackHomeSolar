@@ -1,4 +1,4 @@
-import solarPanel from '../assets/images/image-7.png'; // update path if needed
+import solarPanel from '../assets/images/panal-image.png'; // update path if needed
 
 export default function SolarBenefitsSection() {
   return (
