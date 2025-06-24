@@ -12,7 +12,7 @@ export default {
         lexend: ['Lexend', 'Lexend Fallback', 'sans-serif'],
       },
       fontSize: {
-        heading: ['3.125rem'], // 50px
+        heading: ['2.125rem'], // 50px
         subHeading: ['1.7rem'], // 20px
         Para: ['1.2rem'] // 30px
       },

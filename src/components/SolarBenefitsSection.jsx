@@ -2,15 +2,15 @@ import solarPanel from '../assets/images/panal-image.png'; // update path if nee
 
 export default function SolarBenefitsSection() {
   return (
-    <section className="w-full min-h-screen flex items-center justify-center py-12 px-4 md:px-12">
-      <div className="flex flex-col items-center w-full">
+    <section className="w-full h-screen flex items-center justify-center px-4 md:px-12 text-white">
+      <div className="flex flex-col items-center w-full max-w-7xl gap-12">
         {/* 🟨 Section Title */}
-        <h1 className="text-heading text-center  font-bold mb-12">
+        <h1 className="text-heading text-center font-bold">
           India’s <span className="text-green">Solar Journey</span> Begins Here
         </h1>
 
         {/* 🧱 Grid Layout */}
-        <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 gap-[100px] text-center items-center">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-20 items-center text-center">
           {/* 💡 Top Left */}
           <div className="flex flex-col gap-3 px-4">
             <h3 className="text-yellow font-bold text-subHeading">Best Value</h3>
@@ -20,11 +20,11 @@ export default function SolarBenefitsSection() {
           </div>
 
           {/* 🌞 Center Image */}
-          <div className="row-span-2 flex justify-center items-center md:translate-y-4">
+          <div className="row-span-2 flex justify-center items-center">
             <img
               src={solarPanel}
               alt="Solar Panel Center"
-              className="w-[180px] md:w-[240px] h-auto"
+              className="w-[250px] md:w-[400px] h-auto object-contain"
             />
           </div>
 

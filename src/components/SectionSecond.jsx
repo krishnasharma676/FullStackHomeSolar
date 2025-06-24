@@ -1,8 +1,9 @@
 import { post } from '../utils/api';
 import { useState, useRef, useEffect } from 'react';
-import solarBuilding from '../assets/images/image-2.png';
+import solarBuilding from '../assets/images/second-section.png';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import SolarButton from './SolarButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,20 +47,6 @@ export default function SectionSecond() {
     return () => ctx.revert();
   }, []);
 
-  const handleClick = async () => {
-    setLoading(true);
-    try {
-      const res = await post('/api/trackSolarDevice', {
-        name: 'Krishna Sharma',
-        email: 'krishna@example.com',
-        bill: 2500,
-      });
-      console.log('Response:', res);
-    } catch (err) {
-      console.error('Failed to hit backend:', err.message);
-    }
-    setLoading(false);
-  };
 
   return (
     <section
@@ -73,7 +60,7 @@ export default function SectionSecond() {
             ref={imageRef}
             src={solarBuilding}
             alt="Solar Building"
-            className="w-full max-w-md lg:max-w-lg object-contain drop-shadow-lg"
+            className="w-full max-w-[] lg:max-w-[17rem] object-contain drop-shadow-lg"
           />
         </div>
 
@@ -107,14 +94,9 @@ export default function SectionSecond() {
             Take a free, no-obligation assessment to see if solar is right for you.
           </p>
 
-          <button
-            ref={buttonRef}
-            onClick={handleClick}
-            disabled={loading}
-            className="mt-2 bg-yellow text-black font-bold px-6 py-3 rounded-full w-fit hover:bg-white hover:text-black transition-all duration-300"
-          >
-            {loading ? 'Loading...' : 'Get My Free Assessment'}
-          </button>
+          <SolarButton>
+            Click Here To Find Out How ?
+          </SolarButton>
         </div>
       </div>
     </section>

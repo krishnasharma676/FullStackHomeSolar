@@ -64,7 +64,7 @@ export default function TrustMissionSection() {
                   alt="Yellow Box"
                   className="w-full h-full"
                 />
-                <div className="absolute inset-0 flex flex-col justify-center items-center px-4 text-center">
+                <div className="absolute inset-0 flex flex-col justify-center items-center px-10 text-center">
                   <p className="text-black font-semibold text-sm md:text-base leading-snug">
                     Have you heard stories about unreliable solar companies,
                     pushy salespeople, and hidden costs?
@@ -96,17 +96,17 @@ export default function TrustMissionSection() {
           </p>
 
           <div className="flex text-subHeading flex-col gap-4 text-base text-green ">
-            <div className="flex gap-3 items-start">
-              <CheckCircle className="text-green-500 mt-1" size={50} />
+            <div className="flex gap-3 items-center ml-6">
+              <CheckCircle className="text-green-500 mt-1" size={40} />
               <p>Provide clear, fact-based tools to empower your decision</p>
             </div>
             <div className="flex gap-3 items-center ml-6">
-              <CheckCircle className="text-green-500 mt-1" size={50} />
+              <CheckCircle className="text-green-500 mt-1" size={40} />
               <p>Connect homeowners with verified, local solar professionals</p>
             </div>
           </div>
 
-          <p className="italic text-subHeading text-white border-b border-gray-300 pb-2 max-w-md text-center mt-6">
+          <p className="italic text-Para text-white border-b border-gray-300 pb-2  text-center mt-6">
             “We’re not just helping you choose your solar partner, we’re
             building trust.”
           </p>

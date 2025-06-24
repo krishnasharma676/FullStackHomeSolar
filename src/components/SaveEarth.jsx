@@ -16,7 +16,8 @@ export default function SaveEarth() {
           <img
             src={sun}
             alt="Electric Current"
-            className="w-[80px] h-[80px] object-contain"
+            className="w-[80px] h-[80px] object-contain mix-blend-multiply
+"
           />
           <h3 className="font-bold text-subHeading text-gray-800">Capture Energy</h3>
           <p className="text-Para text-sm text-gray-600">
@@ -29,7 +30,8 @@ export default function SaveEarth() {
           <img
             src={middlesun}
             alt="Sun Power"
-            className="w-[80px] h-[80px] object-contain"
+            className="w-[80px] h-[80px] object-contain mix-blend-multiply
+"
           />
           <h3 className="font-bold text-subHeading text-gray-800">Power from the Sun</h3>
           <p className="text-Para text-sm text-gray-600">
@@ -42,7 +44,8 @@ export default function SaveEarth() {
           <img
             src={flower}
             alt="Green Growth"
-            className="w-[80px] h-[80px] object-contain"
+            className="w-[80px] h-[80px] object-contain mix-blend-multiply
+"
           />
           <h3 className="font-bold text-subHeading text-gray-800">Grow Sustainably</h3>
           <p className="text-Para text-sm text-gray-600">
