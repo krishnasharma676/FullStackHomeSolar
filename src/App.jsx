@@ -12,7 +12,7 @@ import TrustMissionSection from './components/TrustMissionSection';
 import SaveEarth from './components/SaveEarth';
 import Footer from './components/Footer';
 import ModalForm from './components/ModalForm';
-import Dashboard from './components/Dashboard'; // 👈 your new component
+import Dashboard from './components/Dashboard';
 
 function MainHome() {
   const [loading, setLoading] = useState(true);
@@ -39,6 +39,7 @@ function MainHome() {
       )}
       {showModal && <ModalForm onClose={() => setShowModal(false)} />}
     </div>
+    // <Dashboard/>
   );
 }
 

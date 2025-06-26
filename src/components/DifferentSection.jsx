@@ -28,19 +28,19 @@ export default function DifferentSection() {
     >
       {/* Heading & Subheading */}
       <div className="max-w-3xl space-y-4">
-        <h2 ref={headingRef} className="text-3xl md:text-4xl text-heading font-bold">
+        <h2 ref={headingRef} className="text-heading font-bold">
           What Makes Us <span className="text-green">Different?</span>
         </h2>
 
-        <p ref={subheadingRef} className="text-base md:text-lg text-Para leading-7">
+        <p ref={subheadingRef} className="text-para">
           Do you hesitate to go solar because of one word: <span className="text-yellow font-bold">Trust</span>?<br />
           The fear of being misled or spammed with calls held you back.<br />
-          That’s why <span className="text-yellow font-bold">TheSolarHome</span> is built on three pillars:
         </p>
+        <p className="text-para">We get it, and that’s why<span className="text-yellow font-bold">TheSolarHome</span> is built on three pillars:</p>
       </div>
 
       {/* Icon Cards */}
-      <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 bg-white p-6 rounded-xl shadow-lg">
         {[{
           Icon: ShieldCheck,
           title: "Trust First",
@@ -57,11 +57,11 @@ export default function DifferentSection() {
           <div
             key={idx}
             ref={(el) => cardRefs.current[idx] = el}
-            className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center gap-3"
+            className=" flex flex-col items-center gap-3"
           >
-            <card.Icon className="w-8 h-8 text-green" />
-            <h3 className="text-base md:text-lg font-semibold text-subHeading text-black">{card.title}</h3>
-            <p className="text-sm md:text-base text-Para text-black">{card.desc}</p>
+            <card.Icon className="w-8 h-8 text-yellow" />
+            <h3 className=" text-subheading text-green">{card.title}</h3>
+            <p className="text-para text-black">{card.desc}</p>
           </div>
         ))}
       </div>
@@ -69,14 +69,14 @@ export default function DifferentSection() {
       {/* Yellow Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-6xl">
         {[
-          "Every installer we recommend passes a rigorous 5-step verification process.",
-          "We analyze your usage & grid rates to maximize savings.",
-          "Your data is shared only when you choose, and with your permission."
+          "Every installer we recommend passes a rigorous 5-step verification process, ensuring only the best work on your home.",
+          "Our team analyses your electricity usage and local grid rates to design a solar system that maximizes your savings.",
+          "You control your information. Share it only when you’re ready, and only with the installers you choose."
         ].map((text, idx) => (
           <div
             key={idx}
             ref={(el) => boxRefs.current[idx] = el}
-            className="bg-yellow text-black p-5 rounded-md font-semibold text-sm md:text-base leading-6"
+            className="bg-yellow text-black p-5 rounded-md text-para"
           >
             {text}
           </div>

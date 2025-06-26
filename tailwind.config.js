@@ -12,9 +12,15 @@ export default {
         lexend: ['Lexend', 'Lexend Fallback', 'sans-serif'],
       },
       fontSize: {
-        heading: ['2.125rem'], // 50px
-        subHeading: ['1.7rem'], // 20px
-        Para: ['1.2rem'] // 30px
+        heading: {
+          base: '1.5rem', // ~24px for small screens
+          sm: '1.75rem',  // ~28px
+          md: '2rem',     // ~32px
+          lg: '2.125rem', // ~34px
+          xl: '2.5rem',   // ~40px
+        },
+        subHeading: ['1.7rem'],
+        Para: ['1.2rem']
       },
       colors: {
         green: '#20b024',

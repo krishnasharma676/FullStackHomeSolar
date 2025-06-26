@@ -6,7 +6,7 @@ export default function SolarBenefitsSection() {
       <div className="flex flex-col items-center w-full max-w-7xl gap-12">
         {/* 🟨 Section Title */}
         <h1 className="text-heading text-center font-bold">
-          India’s <span className="text-green">Solar Journey</span> Begins Here
+          India’s <span className="text-green">TheSolarHome</span> Promise
         </h1>
 
         {/* 🧱 Grid Layout */}
@@ -30,7 +30,7 @@ export default function SolarBenefitsSection() {
 
           {/* 💡 Top Right */}
           <div className="flex flex-col gap-3 px-4">
-            <h3 className="text-yellow font-bold text-subHeading">Range of Solutions</h3>
+            <h3 className="text-yellow font-bold text-subheading">Range of Solutions</h3>
             <p className="text-para">
               From budget-friendly panels to premium systems, matching your family's goals
             </p>
@@ -38,7 +38,7 @@ export default function SolarBenefitsSection() {
 
           {/* 💡 Bottom Left */}
           <div className="flex flex-col gap-3 px-4">
-            <h3 className="text-yellow font-bold text-subHeading">Full Support</h3>
+            <h3 className="text-yellow font-bold text-subheading">Full Support</h3>
             <p className="text-para">
               With you every step of the way, from consultation to installation and beyond
             </p>
@@ -46,7 +46,7 @@ export default function SolarBenefitsSection() {
 
           {/* 💡 Bottom Right */}
           <div className="flex flex-col gap-3 px-4">
-            <h3 className="text-yellow font-bold text-subHeading">Community</h3>
+            <h3 className="text-yellow font-bold text-subheading">Community</h3>
             <p className="text-para">
               Join our community and share your solar story with neighbours and friends
             </p>

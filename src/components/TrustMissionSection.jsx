@@ -42,9 +42,9 @@ export default function TrustMissionSection() {
           <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl w-full gap-10">
             {/* Left Side */}
             <div className="flex flex-col items-center md:items-start gap-6 w-full md:w-1/2">
-              <h2 className="text-4xl md:text-5xl font-bold text-center md:text-left leading-tight">
+              <h2 className="text-heading font-bold text-center md:text-left">
                 A Mission Born From a{" "}
-                <span className="text-blue-500">Simple Truth</span>
+                <span className="text-green">Simple Truth</span>
               </h2>
 
               <div className="w-full flex justify-center md:justify-start">
@@ -65,11 +65,11 @@ export default function TrustMissionSection() {
                   className="w-full h-full"
                 />
                 <div className="absolute inset-0 flex flex-col justify-center items-center px-10 text-center">
-                  <p className="text-black font-semibold text-sm md:text-base leading-snug">
+                  <p className="text-black font-semibold text-para">
                     Have you heard stories about unreliable solar companies,
                     pushy salespeople, and hidden costs?
                   </p>
-                  <p className="text-black font-semibold mt-3 text-sm md:text-base leading-snug">
+                  <p className="text-black font-semibold mt-3 text-para">
                     You want to go solar, but{" "}
                     <span className="text-green-600">TRUST</span> is hard to
                     come by?
@@ -78,7 +78,7 @@ export default function TrustMissionSection() {
               </div>
 
               {/* Below Text */}
-              <p className="text-yellow-400 text-base text-center md:text-left mt-2">
+              <p className="text-yellow-400 text-subheading text-center md:text-left mt-2">
                 That’s where <span className="font-bold">TheSolarHome</span>{" "}
                 steps in.
               </p>
@@ -89,24 +89,24 @@ export default function TrustMissionSection() {
         {/* Panel 2 */}
         <div className="w-screen h-screen flex flex-col justify-center items-center gap-6 px-6">
           <p className="text-heading font-bold text-center">
-            Our <span className="text-green-500">Mission</span>
+            Our <span className="text-green">Mission</span>
           </p>
-          <p className="text-yellow-400 text-subHeading font-bold text-center">
+          <p className="text-yellow text-subHeading font-bold text-center">
             Make going solar as easy as flipping a switch
           </p>
 
-          <div className="flex text-subHeading flex-col gap-4 text-base text-green ">
+          <div className="flex text-para flex-col gap-4">
             <div className="flex gap-3 items-center ml-6">
-              <CheckCircle className="text-green-500 mt-1" size={40} />
+              <CheckCircle className="text-green mt-1" size={30} />
               <p>Provide clear, fact-based tools to empower your decision</p>
             </div>
             <div className="flex gap-3 items-center ml-6">
-              <CheckCircle className="text-green-500 mt-1" size={40} />
+              <CheckCircle className="text-green mt-1" size={30} />
               <p>Connect homeowners with verified, local solar professionals</p>
             </div>
           </div>
 
-          <p className="italic text-Para text-white border-b border-gray-300 pb-2  text-center mt-6">
+          <p className="italic text-Para border-b border-gray-300 pb-2  text-center mt-6">
             “We’re not just helping you choose your solar partner, we’re
             building trust.”
           </p>

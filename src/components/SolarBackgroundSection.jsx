@@ -16,16 +16,16 @@ export default function SolarBackgroundSection() {
       <div className="absolute inset-0 bg-black/20 backdrop-blur-sm z-0" />
 
       {/* ✅ Text Content */}
-      <div className="relative z-10 max-w-2xl text-center text-white space-y-6">
-        <h2 className="text-4xl md:text-5xl font-bold">
-          Let’s Solarize India, One Home at a Time
+      <div className="relative z-10 max-w-4xl text-center text-white space-y-6">
+        <h2 className="text-heading font-bold">
+          Let’s <span>Solarize India,</span> One Home at a Time
         </h2>
 
-        <p className="text-xl font-semibold">
+        <p className="text-subheading text-yellow font-bold">
           Ready to start your own solar story?
         </p>
 
-        <p className="text-base leading-7">
+        <p className="text-para">
           Take our free assessment, get answers to all your doubts, and make an informed decision that saves money and lights up your home.
         </p>
 

@@ -5,8 +5,8 @@ export default function SaveEarth() {
   return (
     <section className="w-full py-16 px-4 md:px-12 flex flex-col items-center text-center">
       {/* Section Heading */}
-      <h2 className="text-heading text-2xl text-heading font-bold mb-12">
-        How <span className="text-green">Solar Power</span> Works for You
+      <h2 className="text-heading font-bold mb-12">
+        Save The <span className="text-green"> Earth Planet</span>
       </h2>
 
       {/* Grid Cards */}
@@ -19,8 +19,8 @@ export default function SaveEarth() {
             className="w-[80px] h-[80px] object-contain mix-blend-multiply
 "
           />
-          <h3 className="font-bold text-subHeading text-gray-800">Capture Energy</h3>
-          <p className="text-Para text-sm text-gray-600">
+          <h3 className="font-bold text-subheading text-green">Capture Energy</h3>
+          <p className="text-para text-black">
             Solar panels absorb sunlight and convert it into usable electricity instantly.
           </p>
         </div>
@@ -33,8 +33,8 @@ export default function SaveEarth() {
             className="w-[80px] h-[80px] object-contain mix-blend-multiply
 "
           />
-          <h3 className="font-bold text-subHeading text-gray-800">Power from the Sun</h3>
-          <p className="text-Para text-sm text-gray-600">
+          <h3 className="font-bold text-subheading text-green">Power from the Sun</h3>
+          <p className="text-para text-black">
             The sun's rays provide clean, renewable energy without pollution or noise.
           </p>
         </div>
@@ -47,8 +47,8 @@ export default function SaveEarth() {
             className="w-[80px] h-[80px] object-contain mix-blend-multiply
 "
           />
-          <h3 className="font-bold text-subHeading text-gray-800">Grow Sustainably</h3>
-          <p className="text-Para text-sm text-gray-600">
+          <h3 className="font-bold text-subheading text-green">Grow Sustainably</h3>
+          <p className="text-para text-black">
             Go green and watch your impact bloom—saving money and the planet.
           </p>
         </div>

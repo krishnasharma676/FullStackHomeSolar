@@ -1,4 +1,3 @@
-import { post } from '../utils/api';
 import { useState, useRef, useEffect } from 'react';
 import solarBuilding from '../assets/images/second-section.png';
 import gsap from 'gsap';
@@ -68,30 +67,31 @@ export default function SectionSecond() {
         <div className="flex flex-col gap-6 text-white">
           <h2
             ref={headingRef}
-            className="text-4xl md:text-5xl font-bold leading-tight"
+            className="text-heading font-bold leading-tight"
           >
-            Is Solar <span className="text-green">Work</span> For You ?
+            Can Solar <span className="text-green">Work</span> For You ?
           </h2>
 
           <p
             ref={para1Ref}
-            className="text-lg leading-relaxed text-white/90"
+            className="text-para"
           >
-            We help homeowners and businesses confidently transition to clean energy — with zero confusion, only clarity.
+            You want to switch to solar, but don’t know where to start, whom to
+            trust and how to act?
           </p>
 
           <span
             ref={spanRef}
-            className="text-yellow text-lg font-semibold uppercase tracking-wider"
+            className="text-yellow text-subheading font-semibold uppercase tracking-wider"
           >
-            Let’s Find Out Together
+            You Are Not Alone
           </span>
 
           <p
             ref={para2Ref}
-            className="text-lg leading-relaxed text-white/90"
+            className="text-para"
           >
-            Take a free, no-obligation assessment to see if solar is right for you.
+            We invite you to take a free and fact based assessment
           </p>
 
           <SolarButton>

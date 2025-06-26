@@ -48,21 +48,6 @@ export default function LandingPage({openModal}) {
     };
   }, []);
 
-  const handleClick = async () => {
-    setLoading(true);
-    try {
-      const res = await post('/api/trackSolarDevice', {
-        name: 'Krishna Sharma',
-        email: 'krishna@example.com',
-        bill: 2500
-      });
-      console.log('Response:', res);
-    } catch (err) {
-      console.error('Failed to hit backend:', err.message);
-    }
-    setLoading(false);
-  };
-
   return (
     <div ref={containerRef} className="py-[40px] min-h-screen flex flex-col gap-6">
       <div ref={blurRef}>
@@ -73,7 +58,7 @@ export default function LandingPage({openModal}) {
 
           {/* Left Content */}
           <div className="flex flex-col gap-10">
-            <p ref={paraRef} className="mt-5 mb-5 text-Para leading-[40px] text-white">
+            <p ref={paraRef} className="mt-5 mb-5 text-para leading-[40px] text-white">
               We help homeowners and businesses like yours, confidently transition to solar,
               by turning confusion into clarity, guiding you at every step of the way
             </p>

@@ -3,18 +3,107 @@ import { useNavigate } from "react-router-dom";
 import { post } from "../utils/api";
 import gsap from "gsap";
 import { ArrowLeft, ArrowRight, Send, X } from "lucide-react";
-import solarImage from "../assets/images/night.png";
+import solarImage from "../assets/images/modal-image.png";
+import SolarButton from "./SolarButton";
 
 export default function ModalForm({ onClose }) {
   const navigate = useNavigate();
+  // const questions = [
+  //   { id: "name", label: "Your Full Name?", description: "So we know whom we are talking to", required: true, buttonText :"Now you know me.. Lets get real" },
+  //   { id: "email", label: "What's your email?", description: "We'll send your solar savings report here.", required: true, buttonText :"hello" },
+  //   { id: "bill", label: "What's your average monthly electricity bill (in ₹) like?", description: " Typically Summer bills are higher then winters. Provide average of your last 12 month bill. This will help suggest the required system size", required: true, buttonText :"can i reduce it? can't wait to see how :-)" },
+  //   { id: "roofArea", label: "Approx. how much shadow free rooftop area (in Sqft) available at your roof?", description: "Just to help analyse the solar feasibility of your roof. Generally measured as length x breadth of available roof minus any unavailable space. Please mention area in sqft ( 1 square meter = 10.764 sqft and 1 square gaj = 8.99 sqft ) for accurate results.", required: false, buttonText: "Here you go" },
+  //   { id: "location", label: "What's your Home Address (with Pincode)?", description: " So we can analyse your roof via satellite image, run some calculations in your area and provide accurate results. However if don't want to share your full address please share your pincode to proceed.", required: false, buttonText: "Got it, makesense" },
+  //   // { id: "monthlyUnits", label: "How many electricity units (kWh) you use monthly?", description: "Helps estimate solar panel capacity needed.", required: false, buttonText: "biee" },
+  // ];
+
   const questions = [
-    { id: "name", label: "What's your name?", description: "This helps us personalize your solar journey.", required: true },
-    { id: "email", label: "What's your email?", description: "We'll send your solar savings report here.", required: true },
-    { id: "bill", label: "Your average monthly electricity bill (₹)?", description: "Used to estimate your solar savings and system size.", required: true },
-    { id: "monthlyUnits", label: "How many electricity units (kWh) you use monthly?", description: "Helps estimate solar panel capacity needed.", required: false },
-    { id: "roofArea", label: "Approximate rooftop area (in sq. ft)?", description: "To calculate how many panels can fit.", required: false },
-    { id: "location", label: "Which city or area do you live in?", description: "Location helps us estimate solar potential.", required: false },
-  ];
+  {
+    id: "name",
+    label: "Your Full Name?",
+    description: "So we know whom we are talking to",
+    required: true,
+    buttonText: "Now you know me.. Let's get real"
+  },
+  {
+    id: "email",
+    label: "What's your email?",
+    description: "We'll send your solar savings report here.",
+    required: true,
+    buttonText: "hello"
+  },
+  {
+    id: "bill",
+    label: "What's your average monthly electricity bill (in ₹) like?",
+    description: "Typically summer bills are higher than winters. Provide average of your last 12 months to help suggest system size.",
+    required: true,
+    buttonText: "can I reduce it? can't wait to see how :-)"
+  },
+  {
+    id: "currentYear",
+    label: "What's the current year?",
+    description: "Used to calculate your future electricity cost projections.",
+    required: true,
+    buttonText: "Let's go"
+  },
+  {
+    id: "perUnitRate",
+    label: "What's your current electricity rate (₹/kWh)?",
+    description: "Check your latest bill to get this number.",
+    required: true,
+    buttonText: "Done!"
+  },
+  {
+    id: "yoyIncrease",
+    label: "Estimated yearly increase in electricity tariff (%)?",
+    description: "Most states see 3-6% hike annually. We'll use this to forecast your future bills.",
+    required: true,
+    buttonText: "Sounds fair"
+  },
+  {
+    id: "roofArea",
+    label: "Approx. how much shadow-free rooftop area (in sqft) is available?",
+    description: "Helps us check if your roof has enough space for solar panels.",
+    required: false,
+    buttonText: "Here you go"
+  },
+  {
+    id: "location",
+    label: "What's your Home Address or Pincode?",
+    description: "Used to analyze satellite image, local subsidy & solar potential. Just pincode is fine too.",
+    required: false,
+    buttonText: "Got it, makes sense"
+  },
+  {
+    id: "latitude",
+    label: "Latitude of your location (optional)",
+    description: "Used for more accurate CO₂ savings & solar potential",
+    required: false,
+    buttonText: "Added"
+  },
+  {
+    id: "longitude",
+    label: "Longitude of your location (optional)",
+    description: "Used with latitude for better location mapping",
+    required: false,
+    buttonText: "Added"
+  },
+  {
+    id: "investOption",
+    label: "Want to invest your monthly savings? (SIP/FD)",
+    description: "We’ll show how your savings can grow over time if invested",
+    required: false,
+    buttonText: "Show me the money!"
+  },
+  {
+    id: "systemSize",
+    label: "Know your system size already? (in kWp)",
+    description: "Skip if you want us to calculate based on your bill & location",
+    required: false,
+    buttonText: "Optional, but added"
+  }
+];
+
 
   const [step, setStep] = useState(-1);
   const [payload, setPayload] = useState({});
@@ -89,11 +178,11 @@ export default function ModalForm({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 h-screen w-screen flex flex-col bg-black text-white overflow-hidden">
-      <div className="h-[22vh] w-full relative">
+      <div className="h-[18vh] w-full relative mb-3">
         <img
           src={solarImage}
           alt="Banner"
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover opacity-80"
         />
         <button
           onClick={onClose}
@@ -104,8 +193,8 @@ export default function ModalForm({ onClose }) {
       </div>
 
       {step >= 0 && (
-        <div className="px-6 md:px-20 pt-4 pb-2">
-          <div className="text-sm font-medium text-white mb-1">
+        <div className="px-6 md:px-20 pt-2 pb-2">
+          <div className="text-subheading font-bold text-white mb-1">
             Question {step + 1} of {questions.length}
           </div>
           <div className="flex gap-1 justify-start">
@@ -126,26 +215,25 @@ export default function ModalForm({ onClose }) {
       )}
 
       <div className="flex-1 px-6 md:px-20 pt-6 flex flex-col items-start overflow-y-auto pb-10 relative">
-        <h1 className="text-yellow font-bold text-2xl md:text-5xl mb-4">TheSolarHome</h1>
+        <h1 className="font-bold text-heading mb-1 bg-green p-3 rounded">TheSolarHome</h1>
+        <p className="text-subheading mb-6 text-yellow">India's First Solar Calculator</p>
 
         {step === -1 ? (
           <div className="space-y-8 max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold leading-tight">Sounds good?</h2>
-            <p className="text-lg md:text-2xl text-white/90">
-              Answer a few quick questions to get your free solar savings report.
+            <p className="text-para text-white">
+              Welcome to 'The Solar Home, to begin your Solar.
+              Answer a few questions for us and you'll get a comprehensive solar energy analysis for your rooftop. This should only take couple of minutes.
             </p>
-            <button
-              onClick={() => setStep(0)}
-              className="bg-yellow text-black font-semibold px-10 py-4 text-lg md:text-xl rounded-full hover:bg-white transition"
-            >
-              Let's Start
-            </button>
+           
+            <SolarButton className="flex content-center items-center gap-1" onClick={() => setStep(0)}>
+              Sounds Good <ArrowRight className="w-6 h-6" />
+            </SolarButton>
           </div>
         ) : (
           <>
-            <div ref={containerRef} className="w-full max-w-2xl space-y-6">
+            <div ref={containerRef} className="w-full max-w-4xl space-y-6">
               <div ref={questionRef}>
-                <h2 className="text-2xl md:text-3xl font-semibold text-yellow mb-2">
+                <h2 className="text-subheading mb-3">
                   {questions[step].label}
                 </h2>
                 <p className="text-sm text-gray-300 mb-5">
@@ -166,29 +254,22 @@ export default function ModalForm({ onClose }) {
               </div>
             </div>
 
-            <div className="flex justify-between mt-10 w-full max-w-2xl">
+            <div className="flex justify-between mt-5 w-full max-w-4xl">
               <button
                 onClick={back}
                 disabled={step === 0}
                 className="rounded-full p-4 bg-white/10 text-white hover:bg-white hover:text-black transition disabled:opacity-30"
-              >
-                <ArrowLeft className="w-6 h-6" />
-              </button>
+              ><ArrowLeft className="w-6 h-6"/></button>
 
               {step === questions.length - 1 ? (
-                <button
-                  onClick={handleSubmit}
-                  className="rounded-full p-4 bg-green text-black hover:bg-yellow transition"
-                >
-                  <Send className="w-6 h-6" />
-                </button>
+                <SolarButton onClick={handleSubmit}>
+                  <Send className="w-6 h-6 flex content-center items-center" />
+                </SolarButton>
               ) : (
-                <button
-                  onClick={validateAndNext}
-                  className="rounded-full p-4 bg-yellow text-black hover:bg-white transition"
-                >
-                  <ArrowRight className="w-6 h-6" />
-                </button>
+                <SolarButton onClick={validateAndNext} className="flex content-center items-center">
+                  {questions[step].buttonText}<ArrowRight className="w-6 h-6" />
+                </SolarButton>
+                
               )}
             </div>
           </>
