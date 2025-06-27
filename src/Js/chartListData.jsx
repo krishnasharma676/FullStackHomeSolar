@@ -13,15 +13,22 @@ import {
   ComposedChart,
   ScatterChart,
   Scatter,
-} from "recharts"
+} from "recharts";
 
-const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444", "#8b5cf6", "#06b6d4"]
+const COLORS = [
+  "#22c55e",
+  "#eab308",
+  "#f97316",
+  "#ef4444",
+  "#8b5cf6",
+  "#06b6d4",
+];
 
 // Static data for different charts
 const electricityBillData = [
   { name: "Before Solar", cost: 2800, savings: 0 },
   { name: "After Solar", cost: 450, savings: 2350 },
-]
+];
 
 const monthlySavingsData = [
   { month: "Jan", savings: 2200, generation: 850 },
@@ -30,54 +37,64 @@ const monthlySavingsData = [
   { month: "Apr", savings: 2800, generation: 1150 },
   { month: "May", savings: 3000, generation: 1250 },
   { month: "Jun", savings: 3200, generation: 1350 },
-]
-
+];
 
 export const getChartList = (resData) => [
   {
-    title: `${resData.name}`,
-    summary: "Solar homes around you - $2.28",
+    title: `${resData.charts.adoptionScore.label}`,
+    summary: "High Adoption Zone Score is 82",
     description: "Neighborhood solar adoption momentum and pricing trends",
     chart: () => (
-      <ScatterChart
-        data={[
-          { x: 10, y: 20 },
-          { x: 30, y: 40 },
-          { x: 50, y: 60 },
-          { x: 70, y: 30 },
-          { x: 90, y: 80 },
-          { x: 20, y: 70 },
-        ]}
-      >
-        <XAxis dataKey="x" hide />
-        <YAxis dataKey="y" hide />
-        <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px" }} />
-        <Scatter dataKey="y" fill="#eab308" />
-      </ScatterChart>
+      <div className="h-full flex items-center justify-center text-center">
+        <div>
+          <div className="text-yellow-400 text-5xl font-bold mb-2">
+            {resData.charts.adoptionScore.score}
+          </div>
+          <div className="text-gray-400 text-sm">Adoption Score</div>
+        </div>
+      </div>
     ),
-    insights: [
-      "Strong neighborhood adoption momentum",
-      "Competitive pricing at $2.28 per watt",
-      "Growing solar community support",
-    ],
+    insights: ["High Adoption Zone Score is 82"],
   },
   {
-    title: "Your Annual Electricity Cost",
-    summary: "93% above average - Very high consumption",
-    description: "Annual electricity cost analysis and comparison",
+    title: `Your Monthly Bill: ₹${resData.charts.billComparison.userBill}`,
+    summary: `${Math.round(
+      ((resData.charts.billComparison.userBill -
+        resData.charts.billComparison.areaAvg) /
+        resData.charts.billComparison.areaAvg) *
+        100
+    )}% above area avg of ₹${resData.charts.billComparison.areaAvg}`,
+    description: "Comparison of your electricity bill with area average",
     chart: () => (
-      <BarChart data={electricityBillData}>
+      <BarChart
+        data={[
+          { name: "You", cost: resData.charts.billComparison.userBill },
+          { name: "Area Avg", cost: resData.charts.billComparison.areaAvg },
+        ]}
+      >
         <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-        <XAxis dataKey="name" stroke="#9ca3af" hide />
-        <YAxis stroke="#9ca3af" hide />
-        <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px" }} />
+        <XAxis dataKey="name" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
         <Bar dataKey="cost" fill="#eab308" radius={[4, 4, 0, 0]} />
       </BarChart>
     ),
     insights: [
-      "93% higher than neighborhood average",
-      "Significant potential for solar savings",
-      "High consumption indicates good solar ROI",
+      `Your bill is ₹${resData.charts.billComparison.userBill}`,
+      `Area average is ₹${resData.charts.billComparison.areaAvg}`,
+      `This is approximately ${Math.round(
+        ((resData.charts.billComparison.userBill -
+          resData.charts.billComparison.areaAvg) /
+          resData.charts.billComparison.areaAvg) *
+          100
+      )}% higher than your neighborhood average`,
+      "Potential to save by switching to solar",
     ],
   },
   {
@@ -89,7 +106,13 @@ export const getChartList = (resData) => [
         <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
         <XAxis dataKey="month" stroke="#9ca3af" hide />
         <YAxis stroke="#9ca3af" hide />
-        <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px" }} />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
         <Bar dataKey="generation" fill="#eab308" radius={[4, 4, 0, 0]} />
       </BarChart>
     ),
@@ -100,295 +123,416 @@ export const getChartList = (resData) => [
     ],
   },
   {
-    title: "OREA ELECTRIC COMPANY",
-    summary: "Net metering and credit policies",
-    description: "Utility company policies and net metering benefits",
+    title: `Bill Projection (2025–2029)`,
+    summary: `Starts from ₹${resData.charts.billProjection5Yr[0].projected.toLocaleString()} in ${
+      resData.charts.billProjection5Yr[0].year
+    }`,
+    description: "Future electricity cost projections based on current trends",
     chart: () => (
-      <div className="h-full flex items-center justify-center text-center p-4">
-        <div className="space-y-2">
-          <div className="text-yellow-400 font-bold text-lg">Net Metering</div>
-          <div className="text-sm text-gray-300">1:1 Credit Ratio</div>
-          <div className="bg-yellow-400/20 p-2 rounded text-xs">Surplus credits roll over monthly</div>
-        </div>
-      </div>
-    ),
-    insights: ["1:1 net metering credit ratio", "Monthly credit rollover policy", "Favorable utility partnership"],
-  },
-  {
-    title: "New High Island Roof Area Comparison",
-    summary: "Roof suitability analysis",
-    description: "Roof area analysis and solar potential assessment",
-    chart: () => (
-      <BarChart
-        data={[
-          { area: "Available", value: 1000 },
-          { area: "Suitable", value: 800 },
-          { area: "Optimal", value: 600 },
-        ]}
-        layout="horizontal"
-      >
-        <XAxis type="number" hide />
-        <YAxis dataKey="area" type="category" stroke="#9ca3af" hide />
-        <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px" }} />
-        <Bar dataKey="value" fill="#eab308" radius={[0, 4, 4, 0]} />
+      <BarChart data={resData.charts.billProjection5Yr}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+          formatter={(value) => `₹${value.toLocaleString()}`}
+        />
+        <Bar dataKey="projected" fill="#eab308" radius={[4, 4, 0, 0]} />
       </BarChart>
     ),
-    insights: ["1000 sq ft total roof area", "800 sq ft suitable for solar", "600 sq ft in optimal position"],
+    insights: [
+      `Year ${
+        resData.charts.billProjection5Yr[0].year
+      }: ₹${resData.charts.billProjection5Yr[0].projected.toLocaleString()}`,
+      `Year ${
+        resData.charts.billProjection5Yr[4].year
+      }: ₹${resData.charts.billProjection5Yr[4].projected.toLocaleString()}`,
+      "Install solar now to cut this cost in half over 5 years",
+    ],
   },
   {
-    title: "Very High",
-    summary: "76% efficiency rating",
-    description: "Overall system performance and efficiency metrics",
+    title: "Cumulative CO₂ Savings Over 5 Years",
+    summary: `${
+      resData.charts.co2Cumulative.at(-1).totalCO2
+    } kg total CO₂ saved`,
+    description: "Total carbon dioxide emissions offset year over year",
+    chart: () => (
+      <LineChart data={resData.charts.co2Cumulative}>
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          formatter={(value) => `${value} kg`}
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
+        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <Line
+          type="monotone"
+          dataKey="totalCO2"
+          stroke="#eab308"
+          strokeWidth={2}
+        />
+      </LineChart>
+    ),
+    insights: [
+      `Year 1 CO₂ savings: ${resData.charts.co2Cumulative[0].totalCO2} kg`,
+      `Final Year CO₂ savings: ${
+        resData.charts.co2Cumulative.at(-1).totalCO2
+      } kg`,
+      "Positive environmental impact over 5 years",
+    ],
+  },
+
+  {
+    title: "Your CO₂ Offset Potential",
+    summary: `${resData.charts.co2Offset.co2SavedKg} kg CO₂ saved | ${resData.charts.co2Offset.treesEquivalent} trees`,
+    description: "Impact of your solar system on the environment",
     chart: () => (
       <div className="h-full flex items-center justify-center">
         <div className="text-center">
           <div className="w-20 h-20 border-4 border-yellow-400 rounded-full flex items-center justify-center mb-4">
             <div>
-              <div className="text-yellow-400 font-bold text-xl">76%</div>
-              <div className="text-gray-400 text-xs">Avg</div>
+              <div className="text-yellow-400 font-bold text-xl">
+                {resData.charts.co2Offset.co2SavedKg}
+              </div>
+              <div className="text-gray-400 text-xs">kg CO₂</div>
             </div>
           </div>
           <div className="flex justify-around text-xs">
             <div>
-              <div className="text-yellow-400 font-bold">25%</div>
-              <div className="text-gray-400">Savings</div>
-            </div>
-            <div>
-              <div className="text-yellow-400 font-bold">25%</div>
-              <div className="text-gray-400">Extreme</div>
+              <div className="text-yellow-400 font-bold">
+                {resData.charts.co2Offset.treesEquivalent}
+              </div>
+              <div className="text-gray-400">Trees Equivalent</div>
             </div>
           </div>
         </div>
       </div>
     ),
     insights: [
-      "76% average efficiency rating",
-      "25% immediate savings potential",
-      "High performance system recommended",
+      `${resData.charts.co2Offset.co2SavedKg} kg of carbon dioxide saved`,
+      `Equals planting ${resData.charts.co2Offset.treesEquivalent} trees`,
+      "Major environmental contribution through solar energy",
     ],
   },
   {
-    title: "Energy System In Your Roof",
-    summary: "254 ft² optimal placement area",
-    description: "Roof analysis and optimal solar panel placement zones",
+    title: "Cost Comparison Before & After Solar",
+    summary: "Savings over 5 years through solar adoption",
+    description:
+      "Compare electricity cost before and after installing solar panels",
     chart: () => (
-      <div className="h-full flex items-center justify-center">
-        <div className="text-center">
-          <div className="grid grid-cols-8 gap-1 mb-4">
-            {Array.from({ length: 32 }).map((_, i) => (
-              <div key={i} className="w-2 h-2 bg-yellow-400 rounded-full opacity-60" />
-            ))}
-          </div>
-          <div className="text-yellow-400 font-bold text-lg">254 ft²</div>
-          <div className="text-gray-400 text-xs">1,203 ft² | 815 ft²</div>
-        </div>
-      </div>
+      <BarChart data={resData.charts.costComparison}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
+        <Bar dataKey="beforeCost" fill="#ef4444" name="Before Solar" />
+        <Bar dataKey="afterCost" fill="#22c55e" name="After Solar" />
+      </BarChart>
     ),
     insights: [
-      "254 sq ft optimal placement area",
-      "Maximum system capacity: 15kW",
-      "Excellent roof orientation and tilt",
+      `Initial Year Cost Without Solar: ₹${resData.charts.costComparison[0].beforeCost}`,
+      `Final Year Cost With Solar: ₹${resData.charts.costComparison[4].afterCost}`,
+      `Total Savings: ₹${resData.charts.costComparison[4].savings}`,
     ],
   },
   {
-    title: "CAN SOLAR WORK FOR 720 Bufferfield Street?",
-    summary: "High likelihood of solar success",
-    description: "Comprehensive solar viability assessment for your property",
+    title: "ROI From Solar Investment",
+    summary: `₹${resData.charts.investmentROI.lifetimeSavings} lifetime savings, ROI: ${resData.charts.investmentROI.roi}x`,
+    description: "Expected return on investment from your solar panel system",
     chart: () => (
       <div className="h-full flex items-center justify-center text-center">
         <div>
-          <h2 className="text-white text-lg mb-1">CAN SOLAR WORK FOR</h2>
-          <h1 className="text-yellow-400 text-3xl font-bold mb-4">720 Bufferfield Street?</h1>
+          <h2 className="text-white text-lg mb-1">SOLAR ROI</h2>
+          <h1 className="text-yellow-400 text-3xl font-bold mb-4">
+            {resData.charts.investmentROI.roi}x RETURN
+          </h1>
           <div className="flex items-center justify-center gap-4">
-            <span className="text-gray-400 text-xs uppercase">UNLIKELY</span>
+            <span className="text-gray-400 text-xs uppercase">LOW</span>
             <div className="flex gap-2">
               {[1, 2, 3, 4].map((dot) => (
-                <div key={dot} className={`w-3 h-3 rounded-full ${dot <= 3 ? "bg-yellow-400" : "bg-gray-600"}`} />
+                <div
+                  key={dot}
+                  className={`w-3 h-3 rounded-full ${
+                    dot <= resData.charts.investmentROI.roi
+                      ? "bg-yellow-400"
+                      : "bg-gray-600"
+                  }`}
+                />
               ))}
             </div>
-            <span className="text-gray-400 text-xs uppercase">LIKELY</span>
+            <span className="text-gray-400 text-xs uppercase">HIGH</span>
           </div>
         </div>
       </div>
     ),
-    insights: ["High solar viability score", "Excellent roof conditions", "Strong financial benefits projected"],
+    insights: [
+      `System Cost: ₹${resData.charts.investmentROI.systemCost}`,
+      `Estimated Lifetime Savings: ₹${resData.charts.investmentROI.lifetimeSavings}`,
+      `Return on Investment: ${resData.charts.investmentROI.roi}x`,
+    ],
   },
   {
-    title: "Your Grid Quality Is Good",
-    summary: "Stable grid connection",
-    description: "Electrical grid quality and stability assessment",
+    title: "Maintenance Cost Over Years",
+    summary: "Consistent yearly maintenance cost for solar system",
+    description:
+      "Breakdown of annual maintenance expenses to keep your solar system running efficiently",
     chart: () => (
-      <PieChart>
-        <Pie
-          data={[
-            { name: "Good", value: 75 },
-            { name: "Issues", value: 25 },
-          ]}
-          cx="50%"
-          cy="50%"
-          outerRadius={40}
-          dataKey="value"
-        >
-          <Cell fill="#22c55e" />
-          <Cell fill="#ef4444" />
-        </Pie>
-        <Tooltip />
-      </PieChart>
+      <BarChart data={resData.charts.maintenanceOverYears}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
+        <Bar dataKey="cost" fill="#eab308" radius={[4, 4, 0, 0]} />
+      </BarChart>
     ),
-    insights: ["75% grid stability rating", "Minimal power quality issues", "Good for solar integration"],
+    insights: [
+      `₹${resData.charts.maintenanceOverYears[0].cost} annual maintenance cost`,
+      "Flat yearly cost — no increase over time",
+      "Ensures reliable performance with low upkeep",
+    ],
   },
   {
-    title: "Decrease in Solar Human",
-    summary: "Installation workforce trends",
-    description: "Solar installation workforce and capacity trends",
+    title: "Your Past 5-Year Electricity Bill Trend",
+    summary: "Historical electricity expenses in your home",
+    description:
+      "Visual representation of your past electricity bill over 5 years",
     chart: () => (
-      <LineChart
-        data={[
-          { month: "Jan", workers: 120 },
-          { month: "Feb", workers: 115 },
-          { month: "Mar", workers: 110 },
-          { month: "Apr", workers: 105 },
-        ]}
-      >
-        <XAxis dataKey="month" hide />
-        <YAxis hide />
-        <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px" }} />
-        <Line type="monotone" dataKey="workers" stroke="#eab308" strokeWidth={2} />
+      <LineChart data={resData.charts.pastBillTrend}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
+        <Line
+          type="monotone"
+          dataKey="amount"
+          stroke="#eab308"
+          strokeWidth={2}
+        />
       </LineChart>
     ),
     insights: [
-      "Slight decrease in available installers",
-      "May affect installation timeline",
-      "Book installation early",
+      `In 2020, your bill was ₹${
+        resData.charts.pastBillTrend.find((x) => x.year === 2020)?.amount || 0
+      }`,
+      `In 2024, it reduced to ₹${
+        resData.charts.pastBillTrend.find((x) => x.year === 2024)?.amount || 0
+      }`,
+      "Steady decline indicates potential energy saving patterns",
     ],
   },
   {
-    title: "Your Annual Electricity Bill - Very High",
-    summary: "$4,200 annual spend",
-    description: "Current annual electricity expenditure analysis",
-    chart: () => (
-      <div className="h-full flex items-center justify-center text-center">
-        <div>
-          <div className="text-yellow-400 text-4xl font-bold mb-2">$4,200</div>
-          <div className="text-gray-400 text-xs uppercase">WILL SPEND AROUND</div>
-          <div className="text-gray-400 text-xs">AS ELECTRICITY THIS YEAR</div>
-        </div>
-      </div>
-    ),
-    insights: [
-      "$4,200 annual electricity cost",
-      "Very high compared to average",
-      "Excellent candidate for solar savings",
-    ],
-  },
-  {
-    title: "Your Real Grid Deliver Is 48%",
-    summary: "Perfectly fine delivery rate",
-    description: "Grid delivery efficiency and reliability metrics",
+    title: "SIP vs FD Returns Over 5 Years",
+    summary: "Compare returns between SIP and Fixed Deposit",
+    description:
+      "Financial comparison of SIP investment vs traditional FD returns over 5 years",
     chart: () => (
       <ComposedChart
-        data={[
-          { name: "Delivery", value: 48, target: 100 },
-          { name: "Reliability", value: 85, target: 100 },
-        ]}
+        data={resData.charts.sipVsFdReturns.SIP.map((sipItem, index) => ({
+          year: sipItem.year,
+          SIP: sipItem.value,
+          FD: resData.charts.sipVsFdReturns.FD[index]?.value || 0,
+        }))}
       >
-        <XAxis dataKey="name" hide />
-        <YAxis hide />
-        <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: "8px" }} />
-        <Bar dataKey="value" fill="#eab308" />
-        <Line type="monotone" dataKey="target" stroke="#22c55e" strokeDasharray="5 5" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
+        <Bar dataKey="SIP" fill="#eab308" />
+        <Bar dataKey="FD" fill="#06b6d4" />
       </ComposedChart>
     ),
-    insights: ["48% grid delivery efficiency", "Within acceptable range", "No impact on solar performance"],
-  },
-  
-  {
-    title: "Above Average",
-    summary: "1,427 ft² roof area available",
-    description: "Roof area analysis compared to neighborhood average",
-    chart: () => (
-      <div className="h-full flex items-center justify-center text-center">
-        <div>
-          <div className="grid grid-cols-6 gap-1 mb-4">
-            {Array.from({ length: 24 }).map((_, i) => (
-              <div key={i} className="w-1 h-1 bg-yellow-400 rounded-full opacity-40" />
-            ))}
-          </div>
-          <div className="text-yellow-400 font-bold text-lg">1,427 ft²</div>
-          <div className="text-gray-400 text-xs">$58.97</div>
-        </div>
-      </div>
-    ),
-    insights: ["1,427 sq ft total roof area", "Above neighborhood average", "Excellent solar potential"],
-  },
-  {
-    title: "Very High Risk Factors",
-    summary: "Weather and natural disaster assessment",
-    description: "Comprehensive risk analysis for solar installation",
-    chart: () => (
-      <div className="h-full flex flex-col justify-center space-y-1">
-        {[
-          { label: "Lightning", level: "VERY HIGH", color: "text-red-400" },
-          { label: "Hurricane", level: "VERY HIGH", color: "text-red-400" },
-          { label: "Tornado", level: "MEDIUM", color: "text-yellow-400" },
-          { label: "Drought", level: "LOW", color: "text-green-400" },
-          { label: "Flooding", level: "MEDIUM", color: "text-yellow-400" },
-        ].map((risk, idx) => (
-          <div key={idx} className={`text-xs ${risk.color} bg-gray-800 p-1 rounded`}>
-            {risk.label} - {risk.level}
-          </div>
-        ))}
-        <div className="text-yellow-400 font-bold text-xs text-center mt-2">HURRICANE MILTON</div>
-      </div>
-    ),
     insights: [
-      "High weather risk factors present",
-      "Recommend enhanced mounting system",
-      "Insurance considerations important",
+      `After 5 years, SIP value: ₹${
+        resData.charts.sipVsFdReturns.SIP[4]?.value || 0
+      }`,
+      `FD value: ₹${resData.charts.sipVsFdReturns.FD[4]?.value || 0}`,
+      "SIP offers higher long-term returns compared to FD",
     ],
   },
   {
-    title: "Climate Change Hours",
-    summary: "70% and 85% efficiency ratings",
-    description: "Climate impact on solar system performance",
+    title: "Solar Production Over 5 Years",
+    summary: `Annual production trend for your 3kW system`,
+    description:
+      "Estimated annual solar energy production and year-over-year performance decline",
+    chart: () => (
+      <LineChart
+        data={resData.charts.solarProduction.map((item) => ({
+          year: item.year,
+          production: item.production,
+        }))}
+      >
+        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
+        <Line
+          type="monotone"
+          dataKey="production"
+          stroke="#eab308"
+          strokeWidth={2}
+        />
+      </LineChart>
+    ),
+    insights: [
+      `Year 1 production: ${resData.charts.solarProduction[0]?.production} kWh`,
+      `Year 5 production: ${resData.charts.solarProduction[4]?.production} kWh`,
+      "Standard performance degradation of 1%–2% annually",
+    ],
+  },
+  {
+    title: "Tariff, Bill & Units Over Years",
+    summary: `Latest bill: ₹${resData.charts.tariffVsBillVsUnits[4]?.bill}`,
+    description:
+      "Analysis of electricity tariff, units consumed, and resulting bill over the next 5 years",
+    chart: () => (
+      <ComposedChart
+        data={resData.charts.tariffVsBillVsUnits.map((item) => ({
+          year: item.year,
+          tariff: item.tariff,
+          units: item.units,
+          bill: item.bill,
+        }))}
+      >
+        <XAxis dataKey="year" stroke="#9ca3af" />
+        <YAxis stroke="#9ca3af" />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: "#1f2937",
+            border: "1px solid #374151",
+            borderRadius: "8px",
+          }}
+        />
+        <Bar dataKey="bill" fill="#eab308" />
+        <Line
+          type="monotone"
+          dataKey="tariff"
+          stroke="#22c55e"
+          strokeWidth={2}
+        />
+      </ComposedChart>
+    ),
+    insights: [
+      `Bill grew from ₹${resData.charts.tariffVsBillVsUnits[0].bill} to ₹${resData.charts.tariffVsBillVsUnits[4].bill}`,
+      "Steady 3x tariff increase every year",
+      "Units remain constant while cost explodes",
+    ],
+  },
+  {
+    title: `Your Monthly Bill After Solar: ₹${resData.summary.afterBill}`,
+    summary: "Post-installation electricity bill",
+    description: "Projected monthly electricity cost after switching to solar",
+    chart: () => (
+      <div className="h-full flex flex-col justify-center items-center text-center">
+        <div className="text-yellow-400 font-bold text-4xl mb-2">
+          ₹{resData.summary.afterBill}
+        </div>
+        <div className="text-gray-400 text-xs uppercase">
+          PER MONTH AFTER INSTALLATION
+        </div>
+        <div className="text-gray-400 text-xs">
+          Substantial reduction from ₹{resData.user.bill}
+        </div>
+      </div>
+    ),
+    insights: [
+      `Monthly bill reduced from ₹${resData.user.bill} to ₹${resData.summary.afterBill}`,
+      "80%+ savings on electricity cost",
+      "Efficient solar performance expected",
+    ],
+  },
+  {
+    title: `CO₂ Saved: ${resData.summary.co2SavedKg.toLocaleString()} Kg`,
+    summary: `${resData.summary.treesEquivalent.toLocaleString()} Trees Equivalent`,
+    description:
+      "Environmental impact and carbon savings from solar installation",
     chart: () => (
       <div className="h-full flex justify-center items-end space-x-4">
         <div className="flex flex-col items-center">
           <div className="w-4 h-16 bg-gray-700 rounded relative">
-            <div className="absolute bottom-0 w-full bg-yellow-400 rounded" style={{ height: "70%" }} />
+            <div
+              className="absolute bottom-0 w-full bg-yellow-400 rounded"
+              style={{ height: "70%" }}
+            />
           </div>
           <span className="text-xs text-gray-400 mt-1">70%</span>
         </div>
         <div className="flex flex-col items-center">
           <div className="w-4 h-16 bg-gray-700 rounded relative">
-            <div className="absolute bottom-0 w-full bg-yellow-400 rounded" style={{ height: "85%" }} />
+            <div
+              className="absolute bottom-0 w-full bg-yellow-400 rounded"
+              style={{ height: "85%" }}
+            />
           </div>
           <span className="text-xs text-gray-400 mt-1">85%</span>
         </div>
       </div>
     ),
     insights: [
-      "70-85% climate efficiency range",
-      "Minimal climate impact on performance",
-      "System designed for local conditions",
+      `${resData.summary.co2SavedKg.toLocaleString()} Kg of CO₂ offset`,
+      `Equal to planting ${resData.summary.treesEquivalent.toLocaleString()} trees`,
+      "Significant positive climate contribution",
     ],
   },
   {
-    title: "Visibility of Your Roof Structure Is Visible",
+    title: `Lifetime Savings: ₹${resData.summary.lifetimeSavings.toLocaleString()}`,
     summary: "Clear roof access and visibility",
     description: "Roof accessibility and structural visibility assessment",
     chart: () => (
       <div className="h-full bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded flex items-center justify-center">
         <div className="text-center">
           <div className="text-green-400 font-bold text-lg mb-2">VISIBLE</div>
-          <div className="text-gray-400 text-xs">Clear roof structure access</div>
+          <div className="text-gray-400 text-xs">
+            Clear roof structure access
+          </div>
         </div>
       </div>
     ),
-    insights: ["Excellent roof visibility", "Easy installation access", "No structural obstructions"],
+    insights: [
+      `₹${resData.summary.lifetimeSavings.toLocaleString()} total savings projected`,
+      "Excellent roof visibility",
+      "No structural obstructions, easy install",
+    ],
   },
   {
-    title: "Your Sunshine Exposure Is Optimal",
+    title: `Monthly Savings: ₹${resData.summary.monthlySavings.toLocaleString()}`,
     summary: "1,769 hours of unobstructed sunlight",
     description: "Annual sunshine exposure and solar irradiance analysis",
     chart: () => (
@@ -397,10 +541,135 @@ export const getChartList = (resData) => [
           <div className="text-yellow-400 text-4xl font-bold mb-2">1,769</div>
           <div className="text-gray-400 text-xs">Hours of Unobstructed</div>
           <div className="text-gray-400 text-xs">Sunlight Each Year</div>
-          <div className="bg-yellow-400/20 text-yellow-400 px-2 py-1 rounded text-xs font-bold mt-2">OPTIMAL</div>
+          <div className="bg-yellow-400/20 text-yellow-400 px-2 py-1 rounded text-xs font-bold mt-2">
+            OPTIMAL
+          </div>
         </div>
       </div>
     ),
-    insights: ["1,769 hours annual sunshine", "Optimal exposure rating", "Maximum energy generation potential"],
+    insights: [
+      `₹${resData.summary.monthlySavings.toLocaleString()} saved monthly`,
+      "1,769 hours annual sunshine",
+      "Maximum energy generation potential",
+    ],
   },
-]
+  
+  // {
+  //   title: `Payback Period: ${resData.summary.paybackYears} Years`,
+  //   summary: "Solar ROI timeline",
+  //   description: "Years required to recover your solar investment",
+  //   chart: () => (
+  //     <div className="h-full flex items-center justify-center text-center">
+  //       <div>
+  //         <div className="text-yellow-400 text-4xl font-bold mb-2">
+  //           {resData.summary.paybackYears} Yrs
+  //         </div>
+  //         <div className="text-gray-400 text-xs">To Recover Cost</div>
+  //       </div>
+  //     </div>
+  //   ),
+  //   insights: [
+  //     `${resData.summary.paybackYears}-year payback period`,
+  //     "Fast return on investment",
+  //     "Significant long-term savings",
+  //   ],
+  // },
+  // {
+  //   title: `Return on Investment: ${resData.summary.roi}x`,
+  //   summary: "Solar return analysis",
+  //   description: "Total ROI from your solar system over its lifespan",
+  //   chart: () => (
+  //     <div className="h-full flex items-center justify-center text-center">
+  //       <div>
+  //         <div className="text-yellow-400 text-4xl font-bold mb-2">
+  //           {resData.summary.roi}x
+  //         </div>
+  //         <div className="text-gray-400 text-xs">Total ROI Achieved</div>
+  //       </div>
+  //     </div>
+  //   ),
+  //   insights: [
+  //     `${resData.summary.roi}x return on investment`,
+  //     "High financial efficiency",
+  //     "Excellent long-term benefits",
+  //   ],
+  // },
+  // {
+  //   title: `Solar Size: ${resData.summary.solarSizeKW} kW`,
+  //   summary: "Recommended system capacity",
+  //   description: "Optimal solar system size based on your usage",
+  //   chart: () => (
+  //     <div className="h-full flex items-center justify-center text-center">
+  //       <div>
+  //         <div className="text-yellow-400 text-4xl font-bold mb-2">
+  //           {resData.summary.solarSizeKW} kW
+  //         </div>
+  //         <div className="text-gray-400 text-xs">Optimal System Size</div>
+  //       </div>
+  //     </div>
+  //   ),
+  //   insights: [
+  //     `${resData.summary.solarSizeKW} kW recommended capacity`,
+  //     "Enough to power your home",
+  //     "Designed for max efficiency",
+  //   ],
+  // },
+  // {
+  //   title: `System Cost: ₹${resData.summary.systemCost.toLocaleString()}`,
+  //   summary: "Total cost of your solar setup",
+  //   description: "Includes installation, panels, inverter & wiring",
+  //   chart: () => (
+  //     <div className="h-full flex items-center justify-center text-center">
+  //       <div>
+  //         <div className="text-yellow-400 text-2xl font-bold mb-2">
+  //           ₹{resData.summary.systemCost.toLocaleString()}
+  //         </div>
+  //         <div className="text-gray-400 text-xs">Total Solar System Cost</div>
+  //       </div>
+  //     </div>
+  //   ),
+  //   insights: [
+  //     `₹${resData.summary.systemCost.toLocaleString()} system investment`,
+  //     "One-time cost including installation",
+  //     "Recoverable within few years",
+  //   ],
+  // },
+  // {
+  //   title: `Total Savings: ₹${resData.summary.totalSavings.toLocaleString()}`,
+  //   summary: "Lifetime solar savings estimate",
+  //   description: "Projected savings over 25 years of solar usage",
+  //   chart: () => (
+  //     <div className="h-full flex items-center justify-center text-center">
+  //       <div>
+  //         <div className="text-yellow-400 text-2xl font-bold mb-2">
+  //           ₹{resData.summary.totalSavings.toLocaleString()}
+  //         </div>
+  //         <div className="text-gray-400 text-xs">Over Solar Lifetime</div>
+  //       </div>
+  //     </div>
+  //   ),
+  //   insights: [
+  //     `₹${resData.summary.totalSavings.toLocaleString()} in savings`,
+  //     "Massive cost reduction over 25 years",
+  //     "Zero electricity bills possible",
+  //   ],
+  // },
+  // {
+  //   title: `Environmental Impact: ${resData.summary.treesEquivalent} Trees`,
+  //   summary: "Your carbon offset contribution",
+  //   description: "Equivalent number of trees saved by going solar",
+  //   chart: () => (
+  //     <div className="h-full flex flex-col items-center justify-center text-center">
+  //       <div className="text-green-400 text-4xl font-bold mb-2">
+  //         {resData.summary.treesEquivalent}
+  //       </div>
+  //       <div className="text-gray-400 text-xs">Trees Saved</div>
+  //     </div>
+  //   ),
+  //   insights: [
+  //     `${resData.summary.treesEquivalent} trees saved`,
+  //     "Massive CO2 offset contribution",
+  //     "Great for the environment",
+  //   ],
+  // },
+];

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 export async function apiRequest(endpoint, method = 'GET', body = null) {
   const config = {
@@ -24,3 +24,4 @@ export async function apiRequest(endpoint, method = 'GET', body = null) {
 }
 
 export const post = (url, body) => apiRequest(url, 'POST', body);
+
