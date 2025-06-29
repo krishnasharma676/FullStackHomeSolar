@@ -59,3 +59,50 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #FFDD02 transparent;
 }
+
+
+
+.solar-btn {
+  color: #FFDD02;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid #FFDD02;
+  padding: 12px 28px;
+  cursor: pointer;
+  font-weight: 600;
+  background: transparent;
+  position: relative;
+  transition: all 0.6s ease;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 0 #FFDD02;
+}
+
+.solar-btn:hover {
+  color: black;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px #b5a74e;
+}
+
+.solar-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px #b5a74e;
+}
+
+.solar-btn::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 0%;
+  top: 0;
+  left: -40px;
+  transform: skewX(45deg);
+  background-color: #FFDD02;
+  z-index: -1;
+  transition: all 0.6s ease;
+}
+
+.solar-btn:hover::before {
+  width: 180%;
+}
+

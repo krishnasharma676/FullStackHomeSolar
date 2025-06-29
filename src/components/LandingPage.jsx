@@ -63,7 +63,7 @@ export default function LandingPage({openModal}) {
               by turning confusion into clarity, guiding you at every step of the way
             </p>
 
-            <SolarButton onClick={openModal}>
+            <SolarButton onClick={openModal} className='w-[70%]'>
               Get Your Free Solar Savings Report
             </SolarButton>
           </div>

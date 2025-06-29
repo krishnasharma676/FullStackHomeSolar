@@ -6,7 +6,7 @@ import SolarButton from './SolarButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function SectionSecond() {
+export default function SectionSecond({openModal}) {
   const [loading, setLoading] = useState(false);
 
   const sectionRef = useRef();
@@ -59,7 +59,7 @@ export default function SectionSecond() {
             ref={imageRef}
             src={solarBuilding}
             alt="Solar Building"
-            className="w-full max-w-[] lg:max-w-[17rem] object-contain drop-shadow-lg"
+            className="w-full max-w-[] lg:max-w-[15rem] object-contain drop-shadow-lg"
           />
         </div>
 
@@ -94,7 +94,7 @@ export default function SectionSecond() {
             We invite you to take a free and fact based assessment
           </p>
 
-          <SolarButton>
+          <SolarButton  onClick={openModal}>
             Click Here To Find Out How ?
           </SolarButton>
         </div>

@@ -9,66 +9,6 @@ import SolarButton from "./SolarButton";
 export default function ModalForm({ onClose }) {
   const navigate = useNavigate();
 
-  const validationRules = {
-    name: {
-      regex: /^[a-zA-Z\s]{3,50}$/,
-      message: "Enter a valid name (3-50 alphabetic characters).",
-    },
-    email: {
-      regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-      message: "Enter a valid email address.",
-    },
-    bill: {
-      regex: /^\d{2,7}$/,
-      message: "Enter a valid bill amount (₹10 - ₹10,00,000).",
-    },
-    currentYear: {
-      regex: /^20[2-9]\d$/, // allows 2020 - 2099
-      message: "Enter a valid year like 2025.",
-    },
-    perUnitRate: {
-      regex: /^(\d+)(\.\d{1,2})?$/,
-      message: "Enter a valid number like 7.5.",
-    },
-    yoyIncrease: {
-      regex: /^([0-9]|[1-9][0-9])$/,
-      message: "Enter a number between 0 to 99.",
-    },
-    roofArea: {
-      regex: /^\d{1,6}$/,
-      message: "Enter rooftop area in sqft (up to 6 digits).",
-    },
-    location: {
-      regex: /^.{4,100}$/,
-      message: "Enter a valid location or pincode.",
-    },
-    latitude: {
-      regex: /^-?\d{1,2}\.\d+$/,
-      message: "Enter a valid latitude like 28.6",
-    },
-    longitude: {
-      regex: /^-?\d{1,3}\.\d+$/,
-      message: "Enter a valid longitude like 77.2",
-    },
-    investOption: {
-      regex: /^(sip|fd)$/i,
-      message: "Enter SIP or FD",
-    },
-    systemSize: {
-      regex: /^\d+(\.\d{1,2})?$/,
-      message: "Enter system size in kWp like 3.2",
-    },
-  };
-
-  // const questions = [
-  //   { id: "name", label: "Your Full Name?", description: "So we know whom we are talking to", required: true, buttonText :"Now you know me.. Lets get real" },
-  //   { id: "email", label: "What's your email?", description: "We'll send your solar savings report here.", required: true, buttonText :"hello" },
-  //   { id: "bill", label: "What's your average monthly electricity bill (in ₹) like?", description: " Typically Summer bills are higher then winters. Provide average of your last 12 month bill. This will help suggest the required system size", required: true, buttonText :"can i reduce it? can't wait to see how :-)" },
-  //   { id: "roofArea", label: "Approx. how much shadow free rooftop area (in Sqft) available at your roof?", description: "Just to help analyse the solar feasibility of your roof. Generally measured as length x breadth of available roof minus any unavailable space. Please mention area in sqft ( 1 square meter = 10.764 sqft and 1 square gaj = 8.99 sqft ) for accurate results.", required: false, buttonText: "Here you go" },
-  //   { id: "location", label: "What's your Home Address (with Pincode)?", description: " So we can analyse your roof via satellite image, run some calculations in your area and provide accurate results. However if don't want to share your full address please share your pincode to proceed.", required: false, buttonText: "Got it, makesense" },
-  //   // { id: "monthlyUnits", label: "How many electricity units (kWh) you use monthly?", description: "Helps estimate solar panel capacity needed.", required: false, buttonText: "biee" },
-  // ];
-
   const questions = [
     {
       id: "name",
@@ -87,81 +27,89 @@ export default function ModalForm({ onClose }) {
     {
       id: "bill",
       label: "What's your average monthly electricity bill (in ₹)?",
-      description:
-        "Provide average of your last 12 months to help suggest system size.",
+      description: "Provide average of your last 12 months.",
       required: true,
       buttonText: "Let's bring it down!",
     },
     {
       id: "currentYear",
       label: "What's the current year?",
-      description:
-        "Used to calculate your future electricity cost projections.",
+      description: "Used to calculate future electricity cost.",
       required: true,
       buttonText: "Onwards!",
     },
     {
       id: "perUnitRate",
       label: "What's your current electricity rate (₹/kWh)?",
-      description: "Check your latest bill to get this number.",
+      description: "Check your latest bill.",
       required: true,
       buttonText: "Done!",
     },
     {
       id: "yoyIncrease",
-      label: "Estimated yearly increase in electricity tariff (%)?",
-      description:
-        "Most states see 3-6% hike annually. We'll use this to forecast your future bills.",
+      label: "Estimated yearly tariff increase (%)?",
+      description: "Used to forecast future bills.",
       required: true,
       buttonText: "Got it",
     },
     {
       id: "roofArea",
-      label:
-        "Approx. how much shadow-free rooftop area (in sqft) is available?",
-      description:
-        "Helps us check if your roof has enough space for solar panels.",
+      label: "Available shadow-free rooftop area (sqft)?",
+      description: "Helps check if your roof is solar-ready.",
       required: false,
       buttonText: "Here it is",
     },
     {
       id: "location",
-      label: "What's your Home Address or Pincode?",
-      description:
-        "Used to analyze satellite image, local subsidy & solar potential. Just pincode is fine too.",
+      label: "What's your address or pincode?",
+      description: "Used to analyze roof and solar potential.",
       required: false,
       buttonText: "Added!",
     },
     {
       id: "latitude",
-      label: "Latitude of your location (optional)",
-      description: "Used for more accurate CO₂ savings & solar potential",
+      label: "Latitude (optional)",
+      description: "For accurate solar estimates.",
       required: false,
       buttonText: "Added Latitude",
     },
     {
       id: "longitude",
-      label: "Longitude of your location (optional)",
-      description: "Used with latitude for better location mapping",
+      label: "Longitude (optional)",
+      description: "Along with latitude for precision.",
       required: false,
       buttonText: "Added Longitude",
     },
     {
       id: "investOption",
-      label: "Want to invest your monthly savings? (SIP/FD)",
-      description: "We’ll show how your savings can grow over time if invested",
+      label: "Want to invest your savings? (SIP/FD)",
+      description: "See how your savings can grow.",
       required: false,
       buttonText: "Let's grow it!",
     },
     {
       id: "systemSize",
-      label: "Know your system size already? (in kWp)",
-      description:
-        "Skip if you want us to calculate based on your bill & location",
+      label: "Know your system size? (in kWp)",
+      description: "Optional if you want us to calculate.",
       required: false,
       buttonText: "Optional, but added",
     },
   ];
+
+  const validationRules = {
+    name: { regex: /^[a-zA-Z\s]{3,50}$/, message: "Enter a valid name." },
+    email: { regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, message: "Invalid email." },
+    bill: { regex: /^\d{2,7}$/, message: "Enter a valid bill amount." },
+    currentYear: { regex: /^20[2-9]\d$/, message: "Use 2025 or later." },
+    perUnitRate: { regex: /^(\d+)(\.\d{1,2})?$/, message: "Example: 7.5" },
+    yoyIncrease: { regex: /^([0-9]|[1-9][0-9])$/, message: "0-99%" },
+    roofArea: { regex: /^\d{1,6}$/, message: "Max 6 digits" },
+    location: { regex: /^.{4,100}$/, message: "Too short/long location" },
+    latitude: { regex: /^-?\d{1,2}\.\d+$/, message: "Example: 28.6" },
+    longitude: { regex: /^-?\d{1,3}\.\d+$/, message: "Example: 77.2" },
+    investOption: { regex: /^(sip|fd)$/i, message: "Enter SIP or FD" },
+    systemSize: { regex: /^\d+(\.\d{1,2})?$/, message: "Ex: 3.2" },
+  };
 
   const [step, setStep] = useState(-1);
   const [payload, setPayload] = useState({});
@@ -192,38 +140,18 @@ export default function ModalForm({ onClose }) {
     });
   };
 
-  // const validateAndNext = () => {
-  //   const currentQuestion = questions[step];
-  //   const value = payload[currentQuestion.id]?.trim();
-
-  //   if (currentQuestion.required && !value) {
-  //     setError("This field is required.");
-  //     return;
-  //   }
-
-  //   animateOut("next", () => {
-  //     setStep((prev) => prev + 1);
-  //   });
-  // };
-
   const validateAndNext = () => {
-    const currentQuestion = questions[step];
-    const value = payload[currentQuestion.id]?.trim();
+    const current = questions[step];
+    const value = payload[current.id]?.trim();
 
-    if (currentQuestion.required && !value) {
-      setError("This field is required.");
-      return;
-    }
+    if (current.required && !value) return setError("This field is required.");
 
-    const rule = validationRules[currentQuestion.id];
+    const rule = validationRules[current.id];
     if (rule && value && !rule.regex.test(value)) {
-      setError(rule.message);
-      return;
+      return setError(rule.message);
     }
 
-    animateOut("next", () => {
-      setStep((prev) => prev + 1);
-    });
+    animateOut("next", () => setStep((prev) => prev + 1));
   };
 
   const back = () => {
@@ -233,36 +161,14 @@ export default function ModalForm({ onClose }) {
     }
   };
 
-  // const handleSubmit = async () => {
-  //   const currentQuestion = questions[step];
-  //   const value = payload[currentQuestion.id]?.trim();
-
-  //   if (currentQuestion.required && !value) {
-  //     setError("This field is required.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const res = await post("/api/trackSolarDevice", payload);
-  //     navigate("/dashboard", { state: res });
-  //   } catch (err) {
-  //     setError("Failed to submit. Please try again later.");
-  //   }
-  // };
-
   const handleSubmit = async () => {
-    const currentQuestion = questions[step];
-    const value = payload[currentQuestion.id]?.trim();
+    const current = questions[step];
+    const value = payload[current.id]?.trim();
 
-    if (currentQuestion.required && !value) {
-      setError("This field is required.");
-      return;
-    }
-
-    const rule = validationRules[currentQuestion.id];
+    if (current.required && !value) return setError("This field is required.");
+    const rule = validationRules[current.id];
     if (rule && value && !rule.regex.test(value)) {
-      setError(rule.message);
-      return;
+      return setError(rule.message);
     }
 
     try {
@@ -274,7 +180,7 @@ export default function ModalForm({ onClose }) {
   };
 
   useEffect(() => {
-    if (step >= 0) animateIn();
+    if (step >= 0 && step < questions.length) animateIn();
   }, [step]);
 
   return (
@@ -287,10 +193,11 @@ export default function ModalForm({ onClose }) {
         />
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-yellow z-30 rounded-full border border-white p-2"
+          className="absolute top-4 right-4 z-50 p-2 rounded-full border-2 border-white bg-black/60 text-white font-extrabold hover:bg-yellow hover:text-black transition-all duration-300 shadow-lg"
         >
           <X className="w-6 h-6" />
         </button>
+
       </div>
 
       {step >= 0 && step < questions.length && (
@@ -302,13 +209,12 @@ export default function ModalForm({ onClose }) {
             {questions.map((_, i) => (
               <div
                 key={i}
-                className={`h-2 flex-1 rounded-full ${
-                  i < step
+                className={`h-2 flex-1 rounded-full ${i < step
                     ? "bg-green"
                     : i === step
-                    ? "bg-yellow"
-                    : "bg-white/30"
-                }`}
+                      ? "bg-yellow"
+                      : "bg-white/30"
+                  }`}
               />
             ))}
           </div>
@@ -319,19 +225,16 @@ export default function ModalForm({ onClose }) {
         <h1 className="font-bold text-heading mb-1 bg-green p-3 rounded">
           TheSolarHome
         </h1>
-        <p className="text-subheading mb-6 text-yellow">
+        <p className="text-subheading mb-6 mt-2 text-yellow">
           India's First Solar Calculator
         </p>
 
         {step === -1 ? (
           <div className="space-y-8 max-w-2xl">
             <p className="text-para text-white">
-              Welcome to 'The Solar Home, to begin your Solar. Answer a few
-              questions for us and you'll get a comprehensive solar energy
-              analysis for your rooftop. This should only take couple of
-              minutes.
+              Welcome to 'The Solar Home'. Answer a few questions to get a
+              complete solar energy report for your rooftop.
             </p>
-
             <SolarButton
               className="flex content-center items-center gap-1"
               onClick={() => setStep(0)}
@@ -342,28 +245,29 @@ export default function ModalForm({ onClose }) {
         ) : (
           <>
             <div ref={containerRef} className="w-full max-w-4xl space-y-6">
-              <div ref={questionRef}>
-                <h2 className="text-subheading mb-3">
-                  {questions[step].label}
-                </h2>
-                <p className="text-sm text-gray-300 mb-5">
-                  {questions[step].description}
-                </p>
-                <input
-                  type="text"
-                  className={`w-full bg-transparent border-b ${
-                    error ? "border-red-300" : "border-yellow/60"
-                  } text-white placeholder-gray-400 py-3 focus:outline-none focus:border-yellow transition`}
-                  placeholder="Type your answer..."
-                  value={payload[questions[step].id] || ""}
-                  onChange={handleChange}
-                />
-                {error && (
-                  <p className="text-red-300 mt-2 text-sm font-medium">
-                    {error}
+              {questions[step] && (
+                <div ref={questionRef}>
+                  <h2 className="text-subheading mb-3">
+                    {questions[step].label}
+                  </h2>
+                  <p className="text-sm text-gray-300 mb-5">
+                    {questions[step].description}
                   </p>
-                )}
-              </div>
+                  <input
+                    type="text"
+                    className={`w-full bg-transparent border-b ${error ? "border-red-300" : "border-yellow/60"
+                      } text-white placeholder-gray-400 py-3 focus:outline-none focus:border-yellow transition`}
+                    placeholder="Type your answer..."
+                    value={payload[questions[step].id] || ""}
+                    onChange={handleChange}
+                  />
+                  {error && (
+                    <p className="text-red-300 mt-2 text-sm font-medium">
+                      {error}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-between mt-5 w-full max-w-4xl">
@@ -377,7 +281,7 @@ export default function ModalForm({ onClose }) {
 
               {step === questions.length - 1 ? (
                 <SolarButton onClick={handleSubmit}>
-                  <Send className="w-6 h-6 flex content-center items-center" />
+                  <Send className="w-6 h-6" />
                 </SolarButton>
               ) : (
                 <SolarButton

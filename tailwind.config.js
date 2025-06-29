@@ -20,6 +20,7 @@ export default {
           xl: '2.5rem',   // ~40px
         },
         subHeading: ['1.7rem'],
+        subHeading2: ['1.6rem'],
         Para: ['1.2rem']
       },
       colors: {

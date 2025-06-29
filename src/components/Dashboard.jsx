@@ -17,23 +17,26 @@ const Dashboard = () => {
 
   const getGridPosition = (idx) => {
     const positions = {
-      0: "col-start-1 col-end-3 row-start-1 row-end-3",
-      1: "col-start-3 col-end-5 row-start-1 row-end-3",
-      2: "col-start-5 col-end-7 row-start-1 row-end-3",
-      3: "col-start-7 col-end-9 row-start-1 row-end-3",
-      4: "col-start-9 col-end-11 row-start-1 row-end-2",
-      5: "col-start-11 col-end-13 row-start-1 row-end-3",
-      6: "col-start-1 col-end-5 row-start-3 row-end-5",
-      7: "col-start-5 col-end-9 row-start-3 row-end-5",
-      8: "col-start-9 col-end-11 row-start-2 row-end-4",
-      9: "col-start-11 col-end-13 row-start-3 row-end-5",
-      10: "col-start-1 col-end-3 row-start-5 row-end-7",
-      11: "col-start-3 col-end-7 row-start-5 row-end-7",
-      14: "col-start-7 col-end-9 row-start-5 row-end-7",
-      15: "col-start-9 col-end-11 row-start-4 row-end-6",
-      16: "col-start-9 col-end-13 row-start-6 row-end-8",
-      17: "col-start-11 col-end-13 row-start-4 row-end-6",
-    }
+  0: "col-start-1 col-end-3 row-start-1 row-end-3",
+  1: "col-start-3 col-end-5 row-start-1 row-end-3",
+  2: "col-start-5 col-end-7 row-start-1 row-end-3",
+  3: "col-start-7 col-end-9 row-start-1 row-end-3",
+  4: "col-start-9 col-end-11 row-start-1 row-end-2",
+  5: "col-start-11 col-end-13 row-start-1 row-end-3",
+  6: "col-start-1 col-end-5 row-start-3 row-end-5",
+  7: "col-start-5 col-end-9 row-start-3 row-end-5",
+  8: "col-start-9 col-end-11 row-start-2 row-end-4",
+  9: "col-start-11 col-end-13 row-start-3 row-end-5",
+  10: "col-start-1 col-end-3 row-start-5 row-end-7",
+  11: "col-start-3 col-end-7 row-start-5 row-end-7",
+  12: "col-start-7 col-end-9 row-start-5 row-end-7", // 🆕 added
+  13: "col-start-9 col-end-11 row-start-5 row-end-7", // 🆕 added
+  14: "col-start-11 col-end-13 row-start-5 row-end-7",
+  15: "col-start-9 col-end-11 row-start-4 row-end-6",
+  16: "col-start-9 col-end-11 row-start-6 row-end-8",
+  17: "col-start-11 col-end-14 row-start-4 row-end-6",
+};
+
     return positions[idx] || ""
   }
 
@@ -58,7 +61,7 @@ const Dashboard = () => {
                 className={`
                   cursor-pointer transition-all duration-300 hover:z-10 hover:scale-[1.01]
                   ${isHighlightCard(idx)
-                    ? "bg-slate-800 m-2 rounded-xl border-2 border-yellow p-6"
+                    ? "bg-yellow text-black m-2 rounded-xl border-2 border-yellow p-6"
                     : "bg-gradient-to-br from-yellow/10 to-green/10 hover:from-yellow/20 hover:to-green/20 p-4"}
                   backdrop-blur-sm hover:shadow-2xl hover:shadow-yellow/20
                   group relative overflow-hidden rounded-xl
@@ -79,7 +82,7 @@ const Dashboard = () => {
                     <div className="h-full flex items-center justify-center text-center">
                       <div>
                         {/* <h2 className="text-white text-xl font-normal mb-2 tracking-wide">CAN SOLAR WORK FOR</h2> */}
-                        <h1 className="text-yellow text-4xl font-bold mb-8 tracking-wide">TheSolarHome</h1>
+                        <h1 className="text-black text-heading font-bold mb-8 tracking-wide">TheSolarHome</h1>
                         <div className="flex items-center justify-center gap-6">
                           {/* <span className="text-gray-400 text-sm font-medium uppercase tracking-wider">UNLIKELY</span> */}
                           {/* <div className="flex gap-3">

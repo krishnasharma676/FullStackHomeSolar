@@ -62,7 +62,7 @@ export default function TrustMissionSection() {
                 <img
                   src={yellowRectangle}
                   alt="Yellow Box"
-                  className="w-full h-full"
+                  className="w-full h-[350px]"
                 />
                 <div className="absolute inset-0 flex flex-col justify-center items-center px-10 text-center">
                   <p className="text-black font-semibold text-para">

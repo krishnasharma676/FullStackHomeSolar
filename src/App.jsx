@@ -25,14 +25,14 @@ function MainHome() {
         <>
           <div id="main-landing-wrapper">
             <LandingPage openModal={() => setShowModal(true)} />
-            <SectionSecond />
+            <SectionSecond openModal={() => setShowModal(true)}/>
           </div>
           <TrustMissionSection />
           <WhoWeAreSection />
           <DifferentSection />
-          <FreeAssessmentSection />
+          <FreeAssessmentSection openModal={() => setShowModal(true)}/>
           <SolarBenefitsSection />
-          <SolarBackgroundSection />
+          <SolarBackgroundSection openModal={() => setShowModal(true)}/>
           <SaveEarth />
           <Footer />
         </>
