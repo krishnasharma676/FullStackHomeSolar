@@ -44,15 +44,12 @@ export default function ModalForm({ onClose }) {
       description: "Used to analyze roof and solar potential.",
       required: false,
       buttonText: "Added!",
-    },
+    }
   ];
 
   const validationRules = {
     name: { regex: /^[a-zA-Z\s]{3,50}$/, message: "Enter a valid name." },
-    email: {
-      regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-      message: "Invalid email.",
-    },
+    email: { regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, message: "Invalid email." },
     bill: { regex: /^\d{2,7}$/, message: "Enter a valid bill amount." },
     currentYear: { regex: /^20[2-9]\d$/, message: "Use 2025 or later." },
     perUnitRate: { regex: /^(\d+)(\.\d{1,2})?$/, message: "Example: 7.5" },
@@ -147,7 +144,7 @@ export default function ModalForm({ onClose }) {
         />
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2 rounded-full border-2 border-white bg-black/60 text-white font-extrabold hover:bg-yellow hover:text-black transition-all duration-300 shadow-lg"
+          className="absolute top-4 right-4 text-white hover:text-yellow z-30 rounded-full border border-white p-2"
         >
           <X className="w-6 h-6" />
         </button>
