@@ -32,27 +32,6 @@ export default function ModalForm({ onClose }) {
       buttonText: "Let's bring it down!",
     },
     {
-      id: "currentYear",
-      label: "What's the current year?",
-      description: "Used to calculate future electricity cost.",
-      required: true,
-      buttonText: "Onwards!",
-    },
-    {
-      id: "perUnitRate",
-      label: "What's your current electricity rate (₹/kWh)?",
-      description: "Check your latest bill.",
-      required: true,
-      buttonText: "Done!",
-    },
-    {
-      id: "yoyIncrease",
-      label: "Estimated yearly tariff increase (%)?",
-      description: "Used to forecast future bills.",
-      required: true,
-      buttonText: "Got it",
-    },
-    {
       id: "roofArea",
       label: "Available shadow-free rooftop area (sqft)?",
       description: "Helps check if your roof is solar-ready.",
@@ -66,39 +45,14 @@ export default function ModalForm({ onClose }) {
       required: false,
       buttonText: "Added!",
     },
-    {
-      id: "latitude",
-      label: "Latitude (optional)",
-      description: "For accurate solar estimates.",
-      required: false,
-      buttonText: "Added Latitude",
-    },
-    {
-      id: "longitude",
-      label: "Longitude (optional)",
-      description: "Along with latitude for precision.",
-      required: false,
-      buttonText: "Added Longitude",
-    },
-    {
-      id: "investOption",
-      label: "Want to invest your savings? (SIP/FD)",
-      description: "See how your savings can grow.",
-      required: false,
-      buttonText: "Let's grow it!",
-    },
-    {
-      id: "systemSize",
-      label: "Know your system size? (in kWp)",
-      description: "Optional if you want us to calculate.",
-      required: false,
-      buttonText: "Optional, but added",
-    },
   ];
 
   const validationRules = {
     name: { regex: /^[a-zA-Z\s]{3,50}$/, message: "Enter a valid name." },
-    email: { regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, message: "Invalid email." },
+    email: {
+      regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
+      message: "Invalid email.",
+    },
     bill: { regex: /^\d{2,7}$/, message: "Enter a valid bill amount." },
     currentYear: { regex: /^20[2-9]\d$/, message: "Use 2025 or later." },
     perUnitRate: { regex: /^(\d+)(\.\d{1,2})?$/, message: "Example: 7.5" },
@@ -197,7 +151,6 @@ export default function ModalForm({ onClose }) {
         >
           <X className="w-6 h-6" />
         </button>
-
       </div>
 
       {step >= 0 && step < questions.length && (
@@ -209,12 +162,13 @@ export default function ModalForm({ onClose }) {
             {questions.map((_, i) => (
               <div
                 key={i}
-                className={`h-2 flex-1 rounded-full ${i < step
+                className={`h-2 flex-1 rounded-full ${
+                  i < step
                     ? "bg-green"
                     : i === step
-                      ? "bg-yellow"
-                      : "bg-white/30"
-                  }`}
+                    ? "bg-yellow"
+                    : "bg-white/30"
+                }`}
               />
             ))}
           </div>
@@ -255,8 +209,9 @@ export default function ModalForm({ onClose }) {
                   </p>
                   <input
                     type="text"
-                    className={`w-full bg-transparent border-b ${error ? "border-red-300" : "border-yellow/60"
-                      } text-white placeholder-gray-400 py-3 focus:outline-none focus:border-yellow transition`}
+                    className={`w-full bg-transparent border-b ${
+                      error ? "border-red-300" : "border-yellow/60"
+                    } text-white placeholder-gray-400 py-3 focus:outline-none focus:border-yellow transition`}
                     placeholder="Type your answer..."
                     value={payload[questions[step].id] || ""}
                     onChange={handleChange}
