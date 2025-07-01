@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-     "start": "node index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +13,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.6.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.16.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3"

@@ -1,40 +1,47 @@
-const { calculateSolarStats } = require('../utils/calcSolar');
+const { calculateBillChart } = require('./billChartController');
+const { calculateCo2Chart } = require('./co2ChartController');
+const { calculateSavingsChart } = require('./savingsChartController');
+const User = require('../models/User');
+const AppConfig = require('../models/AppConfig');
 
-exports.calculateSolarData = (req, res) => {
-  const {
-    name,
-    email,
-    bill,
-    currentYear,
-    perUnitRate,
-    yoyIncrease,
-    roofArea,
-    location,
-    latitude,
-    longitude,
-    investOption,
-    systemSize
-  } = req.body;
+exports.calculateSolarData = async (req, res) => {
+  try {
+    const input = req.body;
 
-  if (!name || !email || !bill || !currentYear || !perUnitRate || !yoyIncrease) {
-    return res.status(400).json({ message: "Missing required fields" });
+    // ⬇️ Save user data to MongoDB
+    const savedUser = await User.create({
+      name: input.name,
+      email: input.email,
+      bill: input.bill,
+      roofArea: input.roofArea,
+      location: input.location,
+    });
+
+    // ✅ Fetch config values from DB
+    // const unitRate = await AppConfig.findOne({ key: 'unitRatePerKW' });
+    // const roi = await AppConfig.findOne({ key: 'co2SavedPerKW' });
+
+    // console.log('✅ Config Values:');
+    // console.log('Unit Rate:', unitRate.value);
+    // console.log('ROI %:', roi.value);
+
+    // all charts show 
+    const billData = await calculateBillChart(input);
+    const co2Data = calculateCo2Chart(input);
+    const savingsData = calculateSavingsChart(input);
+
+    const response = {
+      userId: savedUser._id,
+      name: savedUser.name,
+      email: savedUser.email,
+      ...billData,
+      ...co2Data,
+      ...savingsData,
+    };
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("❌ Error saving user or calculating data:", error);
+    res.status(500).json({ message: "Error processing solar data", error });
   }
-
-  const input = {
-    name,
-    email,
-    bill: Number(bill),
-    currentYear: Number(currentYear),
-    perUnitRate: Number(perUnitRate),
-    yoyIncrease: Number(yoyIncrease),
-    roofArea,
-    location,
-    latitude,
-    longitude,
-    investOption,
-    systemSize: systemSize ? Number(systemSize) : null
-  };
-
-  const results = calculateSolarStats(input);
-  return res.json({ user: input, ...results });
 };
