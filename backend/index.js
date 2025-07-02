@@ -1,23 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const solarRoutes = require('./routes/solarRoutes');
+require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
 
-dotenv.config();
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const solarRoutes = require("./routes/solarRoutes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('✅ Connected to MongoDB Atlas'))
-.catch((err) => console.error('❌ MongoDB connection error:', err));
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ Connected to MongoDB Atlas");
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1);
+  });
 
-app.use('/api', solarRoutes);
+app.use("/api", solarRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
