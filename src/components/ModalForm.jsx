@@ -1,438 +1,67 @@
-// import { useEffect, useRef, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { post } from "../utils/api";
-// import gsap from "gsap";
-// import { ArrowLeft, ArrowRight, Send, X } from "lucide-react";
-// import solarImage from "../assets/images/modal-image.png";
-// import SolarButton from "./SolarButton";
+"use client"
 
-// export default function ModalForm({ onClose }) {
-//   const navigate = useNavigate();
-
-//   const questions = [
-//     {
-//       id: "name",
-//       label: "Your Full Name?",
-//       description: "So we know whom we are talking to",
-//       required: true,
-//       buttonText: "Nice to meet you!",
-//     },
-//     {
-//       id: "locationDetails",
-//       label: "What is your home address with pincode (where you want your rooftop solar)?",
-//       description:
-//         "So we can analyse your roof, run some calculations (for tariffs, subsidies, and weather data) in your area and provide accurate results. Sharing Pincode is mandatory to proceed.",
-//       required: true,
-//       type: "dualInput",
-//       fields: [
-//         { key: "address", label: "Address", placeholder: "Your home address..." },
-//         { key: "pincode", label: "Pincode", placeholder: "6-digit Pincode" },
-//       ],
-//       buttonText: "Got it, Make Sense -->",
-//     },
-//     {
-//       id: "bill",
-//       label: "What's your average monthly electricity bill (₹) or consumption (kWh)?",
-//       description: "Choose one and enter the value. Sharing pincode is mandatory to proceed.",
-//       type: "radioInput",
-//       required: true,
-//       options: [
-//         { key: "monthlyBill", label: "Monthly Bill (₹)" },
-//         { key: "monthlyUnits", label: "Monthly Consumption (kWh)" },
-//       ],
-//       buttonText: "Let's bring it down!",
-//     },
-//     {
-//       id: "roofArea",
-//       label: "Approx. how much shadow free rooftop area (in Sqft) available at your roof?",
-//       description:
-//         "Just to help analyse the solar feasibility of your roof. Generally measured as 'length x breadth' of available roof minus any unavailable space. Please mention area in sqft (1 square meter = 10.764 sqft and 1 square gaj = 8.99 sqft) for accurate results.",
-//       required: true,
-//       buttonText: "Check Roof Feasibility",
-//     },
-//   ];
-
-//   const validationRules = {
-//     name: { regex: /^[a-zA-Z\s]{3,50}$/, message: "Enter a valid name." },
-//     address: { regex: /^.{4,100}$/, message: "Enter a valid address (min 4 chars)" },
-//     pincode: { regex: /^[1-9][0-9]{5}$/, message: "Enter a valid 6-digit Indian pincode" },
-//     monthlyBill: { regex: /^\d{2,7}$/, message: "Enter a valid bill amount." },
-//     monthlyUnits: { regex: /^\d{2,6}$/, message: "Enter valid units (kWh)." },
-//     roofArea: { regex: /^\d{1,6}$/, message: "Enter valid area in sqft (max 6 digits)" },
-//   };
-
-//   const [step, setStep] = useState(-1);
-//   const [payload, setPayload] = useState({});
-//   const [error, setError] = useState("");
-//   const [isPincodeVerified, setIsPincodeVerified] = useState(false);
-//   const questionRef = useRef(null);
-
-//   const handleChange = (e) => {
-//     setPayload({ ...payload, [questions[step].id]: e.target.value });
-//     if (error) setError("");
-//   };
-
-//   const animateIn = () => {
-//     gsap.fromTo(
-//       questionRef.current,
-//       { opacity: 0, x: 100 },
-//       { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }
-//     );
-//   };
-
-//   const animateOut = (direction, callback) => {
-//     gsap.to(questionRef.current, {
-//       opacity: 0,
-//       x: direction === "next" ? -100 : 100,
-//       duration: 0.3,
-//       ease: "power2.in",
-//       onComplete: callback,
-//     });
-//   };
-
-//   const validateAndNext = () => {
-//     const current = questions[step];
-
-//     if (current.id === "locationDetails") {
-//       const address = payload.address?.trim();
-//       const pincode = payload.pincode?.trim();
-
-//       if (!address || !pincode)
-//         return setError("Both address and pincode are required.");
-//       if (!validationRules.address.regex.test(address))
-//         return setError(validationRules.address.message);
-//       if (!validationRules.pincode.regex.test(pincode))
-//         return setError(validationRules.pincode.message);
-//       if (!isPincodeVerified)
-//         return setError("Please verify the pincode before proceeding.");
-
-//       return animateOut("next", () => setStep((prev) => prev + 1));
-//     }
-
-//     if (current.id === "bill") {
-//       const selected = payload.selectedBillType;
-//       const value = payload[selected]?.trim();
-//       if (!selected || !value) return setError("Please select and enter the value.");
-//       const rule = validationRules[selected];
-//       if (!rule.regex.test(value)) return setError(rule.message);
-//       return animateOut("next", () => setStep((prev) => prev + 1));
-//     }
-
-//     const value = payload[current.id]?.trim();
-//     if (!value) return setError("This field is required.");
-//     const rule = validationRules[current.id];
-//     if (rule && !rule.regex.test(value)) return setError(rule.message);
-
-//     animateOut("next", () => setStep((prev) => prev + 1));
-//   };
-
-//   const back = () => {
-//     if (step > 0) {
-//       setError("");
-//       animateOut("back", () => setStep((prev) => prev - 1));
-//     }
-//   };
-
-//   const handleSubmit = async () => {
-//     const current = questions[step];
-
-//     if (current.id === "bill") {
-//       const selected = payload.selectedBillType;
-//       const value = payload[selected]?.trim();
-//       if (!selected || !value) return setError("Please select and enter the value.");
-//       const rule = validationRules[selected];
-//       if (!rule.regex.test(value)) return setError(rule.message);
-
-//       const finalPayload = {
-//         ...payload,
-//         bill: value,
-//       };
-//       delete finalPayload.selectedBillType;
-//       delete finalPayload.monthlyBill;
-//       delete finalPayload.monthlyUnits;
-
-//       try {
-//         const res = await post("/api/trackSolarDevice", finalPayload);
-//         navigate("/dashboard", { state: res });
-//       } catch (err) {
-//         setError("Failed to submit. Please try again later.");
-//       }
-//       return;
-//     }
-
-//     const value = payload[current.id]?.trim();
-//     if (!value) return setError("This field is required.");
-//     const rule = validationRules[current.id];
-//     if (!rule.regex.test(value)) return setError(rule.message);
-
-//     try {
-//       const res = await post("/api/trackSolarDevice", payload);
-//       navigate("/dashboard", { state: res });
-//     } catch (err) {
-//       setError("Failed to submit. Please try again later.");
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (step >= 0 && step < questions.length) animateIn();
-//   }, [step]);
-
-//   return (
-//     <div className="fixed inset-0 z-50 h-screen w-screen flex flex-col bg-black text-white overflow-hidden">
-//       <div className="h-[18vh] w-full relative mb-3">
-//         <img src={solarImage} alt="Banner" className="w-full h-full object-cover opacity-80" />
-//         <button onClick={onClose} className="absolute top-4 right-4 text-white hover:text-yellow z-30 rounded-full border border-white p-2">
-//           <X className="w-6 h-6" />
-//         </button>
-//       </div>
-
-//       {step >= 0 && step < questions.length && (
-//         <div className="px-6 md:px-20 pt-2 pb-2">
-//           <div className="text-subheading font-bold text-white mb-1">
-//             Question {step + 1} of {questions.length}
-//           </div>
-//           <div className="flex gap-1 justify-start">
-//             {questions.map((_, i) => (
-//               <div
-//                 key={i}
-//                 className={`h-2 flex-1 rounded-full ${
-//                   i < step ? "bg-green" : i === step ? "bg-yellow" : "bg-white/30"
-//                 }`}
-//               />
-//             ))}
-//           </div>
-//         </div>
-//       )}
-
-//       <div className="flex-1 px-6 md:px-20 pt-6 flex flex-col items-start overflow-y-auto pb-10 relative">
-//         <h1 className="font-bold text-heading mb-1 bg-green p-3 rounded">TheSolarHome</h1>
-//         <p className="text-subheading mb-6 mt-2 text-yellow">India's First Solar Calculator</p>
-
-//         {step === -1 ? (
-//           <div className="space-y-8 max-w-2xl">
-//             <p className="text-para text-white">
-//               Welcome to 'The Solar Home', your one stop platform to begin your Solar Journey.
-//             </p>
-//             <SolarButton className="flex content-center items-center gap-1" onClick={() => setStep(0)}>
-//               Sounds Good <ArrowRight className="w-6 h-6" />
-//             </SolarButton>
-//           </div>
-//         ) : (
-//           <>
-//             <div ref={questionRef} className="w-full max-w-4xl space-y-6">
-//               <h2 className="text-subheading mb-3">{questions[step].label}</h2>
-//               <p className="text-sm text-gray-300 mb-5">{questions[step].description}</p>
-
-//               {questions[step].type === "dualInput" ? (
-//                 <>
-//                   <div className="flex flex-col md:flex-row gap-5 mb-5">
-//                     {questions[step].fields.map((field) => (
-//                       <div key={field.key} className="w-full">
-//                         <label className="block text-white mb-1">{field.label}</label>
-//                         <input
-//                           type="text"
-//                           placeholder={field.placeholder}
-//                           value={payload[field.key] || ""}
-//                           onChange={(e) => {
-//                             setPayload((prev) => ({ ...prev, [field.key]: e.target.value }));
-//                             if (field.key === "pincode") setIsPincodeVerified(false);
-//                             setError("");
-//                           }}
-//                           onBlur={
-//                             field.key === "pincode"
-//                               ? async () => {
-//                                   const pin = payload.pincode?.trim();
-//                                   if (!pin || !validationRules.pincode.regex.test(pin)) return;
-//                                   setError("Validating Pincode...");
-//                                   // Uncomment when backend is ready
-//                                   /*
-//                                   try {
-//                                     const res = await post("/api/verifyPincode", { pincode: pin });
-//                                     if (res?.valid) {
-//                                       setIsPincodeVerified(true);
-//                                       setError("");
-//                                     } else {
-//                                       setError("Pincode not serviceable.");
-//                                       setIsPincodeVerified(false);
-//                                     }
-//                                   } catch {
-//                                     setError("Server error during pincode verification.");
-//                                     setIsPincodeVerified(false);
-//                                   }
-//                                   */
-//                                   // Dummy simulation
-//                                   setTimeout(() => {
-//                                     setIsPincodeVerified(true);
-//                                     setError("");
-//                                   }, 500);
-//                                 }
-//                               : undefined
-//                           }
-//                           className={`w-full bg-transparent border-b ${
-//                             error && !payload[field.key] ? "border-red-300" : "border-yellow/60"
-//                           } text-white placeholder-gray-400 py-3 focus:outline-none focus:border-yellow transition`}
-//                         />
-//                       </div>
-//                     ))}
-//                   </div>
-//                   {error && <p className="text-red-300 mt-2 text-sm font-medium">{error}</p>}
-//                 </>
-//               ) : questions[step].type === "radioInput" ? (
-//                 <>
-//                   <div className="flex flex-col md:flex-row gap-4">
-//                     {questions[step].options.map((option) => (
-//                       <label
-//                         key={option.key}
-//                         className={`flex-1 border border-yellow/50 rounded-lg px-4 py-3 flex items-center gap-3 cursor-pointer hover:border-yellow transition ${
-//                           payload.selectedBillType === option.key ? "border-yellow bg-white/10" : ""
-//                         }`}
-//                         onClick={() => {
-//                           setPayload((prev) => ({
-//                             ...prev,
-//                             selectedBillType: option.key,
-//                             [option.key]: "",
-//                           }));
-//                           setError("");
-//                         }}
-//                       >
-//                         <input
-//                           type="radio"
-//                           name="billOption"
-//                           value={option.key}
-//                           checked={payload.selectedBillType === option.key}
-//                           onChange={() => {}}
-//                           className="accent-yellow w-4 h-4"
-//                         />
-//                         <span className="text-white">{option.label}</span>
-//                       </label>
-//                     ))}
-//                   </div>
-
-//                   {payload.selectedBillType && (
-//                     <input
-//                       type="text"
-//                       placeholder={`Enter ${
-//                         payload.selectedBillType === "monthlyBill" ? "₹ amount" : "units in kWh"
-//                       }`}
-//                       value={payload[payload.selectedBillType] || ""}
-//                       onChange={(e) =>
-//                         setPayload((prev) => ({
-//                           ...prev,
-//                           [payload.selectedBillType]: e.target.value,
-//                         }))
-//                       }
-//                       className={`w-full mt-5 bg-transparent border-b ${
-//                         error ? "border-red-300" : "border-yellow/60"
-//                       } text-white placeholder-gray-400 py-3 focus:outline-none focus:border-yellow transition`}
-//                     />
-//                   )}
-
-//                   {error && <p className="text-red-300 mt-2 text-sm font-medium">{error}</p>}
-//                 </>
-//               ) : (
-//                 <>
-//                   <input
-//                     type="text"
-//                     className={`w-full bg-transparent border-b ${
-//                       error ? "border-red-300" : "border-yellow/60"
-//                     } text-white placeholder-gray-400 py-3 focus:outline-none focus:border-yellow transition`}
-//                     placeholder="Type your answer..."
-//                     value={payload[questions[step].id] || ""}
-//                     onChange={handleChange}
-//                   />
-//                   {error && <p className="text-red-300 mt-2 text-sm font-medium">{error}</p>}
-//                 </>
-//               )}
-//             </div>
-
-//             <div className="flex justify-between mt-5 w-full max-w-4xl">
-//               <button
-//                 onClick={back}
-//                 disabled={step === 0}
-//                 className="rounded-full p-4 bg-white/10 text-white hover:bg-white hover:text-black transition disabled:opacity-30"
-//               >
-//                 <ArrowLeft className="w-6 h-6" />
-//               </button>
-
-//               {step === questions.length - 1 ? (
-//                 <SolarButton onClick={handleSubmit}>
-//                   <Send className="w-6 h-6" />
-//                 </SolarButton>
-//               ) : (
-//                 <SolarButton onClick={validateAndNext} className="flex content-center items-center">
-//                   {questions[step].buttonText}
-//                   <ArrowRight className="w-6 h-6" />
-//                 </SolarButton>
-//               )}
-//             </div>
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { post } from "../utils/api";
-import gsap from "gsap";
-import { ArrowLeft, ArrowRight, Send, X } from "lucide-react";
-import solarImage from "../assets/images/modal-image.png";
-import SolarButton from "./SolarButton";
+import { useEffect, useRef, useState, useCallback } from "react"
+import { useNavigate } from "react-router-dom"
+import { post } from "../utils/api"
+import gsap from "gsap"
+import { ArrowLeft, ArrowRight, Send, X } from "lucide-react"
+import solarImage from "../assets/images/modal-image.png"
+import SolarButton from "./SolarButton"
 
 export default function ModalForm({ onClose }) {
-  const navigate = useNavigate();
-  const questionRef = useRef(null);
-  const [step, setStep] = useState(-1);
-  const [payload, setPayload] = useState({});
-  const [error, setError] = useState("");
-  const [isPincodeVerified, setIsPincodeVerified] = useState(false);
+  const navigate = useNavigate()
+  const questionRef = useRef(null)
+
+  const [step, setStep] = useState(-1)
+  const [payload, setPayload] = useState({})
+  const [error, setError] = useState("")
+  const [isPincodeVerified, setIsPincodeVerified] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const questions = [
     {
       id: "name",
-      label: "Your Full Name?",
-      description: "So we know whom we are talking to",
+      label: "What is your full name?",
+      description: "So, we can start the healthy conversation with you",
       required: true,
-      buttonText: "Nice to meet you!",
+      buttonText: "Here you go",
     },
     {
       id: "locationDetails",
-      label: "What is your home address with pincode?",
-      description: "To run accurate solar analysis for your area.",
+      label: "What is your home address with pincode (where you want your rooftop solar)?",
+      description: "So we can analyse your roof , run some calculations (for tarrifs, subsidies, and weather data ) in your area and provide accurate results. Sharing Pincode is mandatory to proceed. ",
       required: true,
       type: "dualInput",
       fields: [
         { key: "address", label: "Address", placeholder: "Enter your address" },
-        { key: "pincode", label: "Pincode", placeholder: "6-digit PIN" },
+        { key: "pincode", label: "Pincode", placeholder: "6-digit PIN", numeric: true },
       ],
-      buttonText: "Proceed",
+      buttonText: "Got it, Make Sense",
     },
     {
       id: "bill",
-      label: "What's your average monthly electricity bill or consumption?",
-      description: "Choose one and enter its value",
+      label: "What's your average monthly electricity bill (in ₹) or Average Monthly Electricity Consumption (Units per Month in kWh)? ",
+      description: "Typically summer bills are higher then winters. Provide average of your last 12 month bill. This will help suggest the required system size.",
       type: "radioInput",
       required: true,
       options: [
-        { key: "monthlyBill", label: "Monthly Bill (₹)" },
-        { key: "monthlyUnits", label: "Monthly Consumption (kWh)" },
+        { key: "monthlyBill", label: "Monthly Bill (₹)", numeric: true },
+        { key: "monthlyUnits", label: "Monthly Consumption (kWh)", numeric: true },
       ],
-      buttonText: "Let's bring it down!",
+      buttonText: "Curious to see how solar can help me save",
     },
     {
       id: "roofArea",
-      label: "Approx. how much shadow free rooftop area (in Sqft)?",
-      description:
-        "Helps us check roof feasibility. 1 sq.m = 10.76 sqft | 1 gaj = 8.99 sqft.",
+      label: "Approx. how much shadow free rooftop area (in Sqft) available at your roof? ",
+      description: "Just to help analyse the solar feasibility of your roof. Generally measured as 'length x breadth' of available roof minus any unavailable space. Please mention area in sqft ( 1 square meter = 10.764 sqft and 1 square gaj = 8.99 sqft ) for accurate results.",
       required: true,
-      buttonText: "Check Roof Feasibility",
+      buttonText: "Here you go",
+      numeric: true,
     },
     {
       id: "moreInfo",
-      label: "We're so grateful for your time with us so far.",
-      description:
-        "We feel like we already know you. Want to speed up processing?",
+      label: "we're so grateful for your time with us so far. ",
+      description: "We feel like we already know you, but if you have some time and can give us a little more information, we can process your request faster!",
       type: "radioInfo",
       required: true,
       options: [
@@ -445,220 +74,316 @@ export default function ModalForm({ onClose }) {
           label: "Nah, I am done for now and want to see my results",
         },
       ],
-      buttonText: "Continue",
+      buttonText: "Next",
     },
     {
       id: "followUp",
-      label:
-        "Please email your recent electricity bill to hello@thesolarhome.in or Whatsapp to +91 88x xxx xxxx.",
-      description:
-        "This helps us to provide the most accurate results and assess solar support.",
+      label: "Please email your recent electricity bill to hello@thesolarhome.in or Whatsapp to +91 88x xxx xxxx.",
+      description: "This help us to provide the most accurate results for your home and assess your discom solar support. ",
       type: "radioFollowup",
       required: true,
       options: [
         { key: "shared", label: "Shared the electricity bill, please check" },
         {
           key: "notHandy",
-          label:
-            "Not handy now, will share shortly. Please follow up in some time",
+          label: "Not handy now, will share shortly. Please follow up in some time",
         },
         {
           key: "notWilling",
-          label:
-            "I don't wish to share at this point. Just show me the results.",
+          label: "I don't wish to share at this point. May be later, now please show me the assessment results",
         },
       ],
-      buttonText: "Next",
+      buttonText: "Done",
     },
     {
       id: "userPhone",
-      label: "Please enter your Phone Number",
-      description: "We may also reach out on WhatsApp.",
+      label: "What's good phone number to text you later?",
+      description: "We may also reach out.",
       required: true,
       buttonText: "Next",
+      numeric: true,
     },
     {
       id: "userEmail",
-      label: "Please enter your Email ID",
+      label: "And what's your best email address? ",
       description: "So we can follow up with you easily.",
       required: true,
       buttonText: "Submit",
     },
-  ];
+  ]
 
   const validationRules = {
-    name: { regex: /^[a-zA-Z\s]{3,50}$/, message: "Enter a valid name." },
-    address: { regex: /^.{4,100}$/, message: "Address too short." },
-    pincode: { regex: /^[1-9][0-9]{5}$/, message: "Enter a 6-digit PIN" },
-    monthlyBill: { regex: /^\d{2,7}$/, message: "Enter valid bill (₹)" },
-    monthlyUnits: { regex: /^\d{2,6}$/, message: "Enter valid units (kWh)" },
+    name: { regex: /^[a-zA-Z\s]{2,50}$/, message: "Enter a valid name (2-50 characters)." },
+    address: { regex: /^.{10,200}$/, message: "Address must be 10-200 characters." },
+    pincode: { regex: /^[1-9][0-9]{5}$/, message: "Enter a valid 6-digit PIN" },
+    monthlyBill: { regex: /^\d{2,7}$/, message: "Enter valid bill amount (₹)" },
+    monthlyUnits: { regex: /^\d{1,6}$/, message: "Enter valid units (kWh)" },
     roofArea: { regex: /^\d{1,6}$/, message: "Enter rooftop area in sqft" },
     userEmail: {
       regex: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
-      message: "Invalid email address",
+      message: "Enter a valid email address",
     },
     userPhone: {
       regex: /^[6-9]\d{9}$/,
-      message: "Invalid phone number",
+      message: "Enter a valid 10-digit phone number",
     },
-  };
+  }
 
-  const animateIn = () => {
-    gsap.fromTo(
-      questionRef.current,
-      { opacity: 0, x: 100 },
-      { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }
-    );
-  };
-
-  const animateOut = (direction, callback) => {
-    gsap.to(questionRef.current, {
-      opacity: 0,
-      x: direction === "next" ? -100 : 100,
-      duration: 0.3,
-      ease: "power2.in",
-      onComplete: callback,
-    });
-  };
-  const handleRadioFollowup = (key) => {
-    setPayload((prev) => ({ ...prev, followUp: key }));
-    setError("");
-
-    if (key === "shared") {
-      setTimeout(() => {
-        alert("Thank you so much for your promptness!");
-        navigate("/dashboard");
-      }, 1000);
-    } else if (key === "notHandy") {
-      animateOut("next", () => setStep((prev) => prev + 1)); // phone step
-    } else if (key === "notWilling") {
-      setTimeout(() => {
-        handleSubmit(); // submit directly
-      }, 1000);
+  const animateIn = useCallback(() => {
+    if (questionRef.current) {
+      gsap.fromTo(questionRef.current, { opacity: 0, x: 100 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" })
     }
-  };
+  }, [])
 
-  const validateInput = (id, value) => {
-    const rule = validationRules[id];
-    if (!value || !value.trim()) return "This field is required.";
-    if (rule && !rule.regex.test(value.trim())) return rule.message;
-    return "";
-  };
+  const animateOut = useCallback((direction, callback) => {
+    if (questionRef.current) {
+      gsap.to(questionRef.current, {
+        opacity: 0,
+        x: direction === "next" ? -100 : 100,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: callback,
+      })
+    } else {
+      callback()
+    }
+  }, [])
 
-  const validateAndNext = () => {
-    const current = questions[step];
+  const validateInput = useCallback((id, value) => {
+    const rule = validationRules[id]
+    if (!value || !value.toString().trim()) return "This field is required."
+    if (rule && !rule.regex.test(value.toString().trim())) return rule.message
+    return ""
+  }, [])
 
+  // Helper function to get option label by key
+  const getOptionLabel = useCallback((questionId, optionKey) => {
+    const question = questions.find((q) => q.id === questionId)
+    if (!question || !question.options) return optionKey
+    const option = question.options.find((opt) => opt.key === optionKey)
+    return option ? option.label : optionKey
+  }, [])
+
+  const handleRadioFollowup = useCallback(
+    (key) => {
+      const optionLabel = getOptionLabel("followUp", key)
+      setPayload((prev) => ({ ...prev, followUp: optionLabel, followUpKey: key }))
+      setError("")
+    },
+    [getOptionLabel],
+  )
+
+  // Handle numeric input restriction
+  const handleNumericInput = useCallback((e, fieldKey) => {
+    const value = e.target.value
+    // Allow only numbers
+    if (!/^\d*$/.test(value)) {
+      e.preventDefault()
+      return
+    }
+    updatePayload(fieldKey, value)
+  }, [])
+
+  const validateAndNext = useCallback(() => {
+    if (isSubmitting) return
+
+    const current = questions[step]
+    if (!current) return
+
+    setError("")
+
+    // Handle locationDetails validation
     if (current.id === "locationDetails") {
-      const address = payload.address?.trim();
-      const pincode = payload.pincode?.trim();
+      const address = payload.address?.trim()
+      const pincode = payload.pincode?.trim()
 
-      const err1 = validateInput("address", address);
-      if (err1) return setError(err1);
+      const addressError = validateInput("address", address)
+      if (addressError) return setError(addressError)
 
-      const err2 = validateInput("pincode", pincode);
-      if (err2) return setError(err2);
+      const pincodeError = validateInput("pincode", pincode)
+      if (pincodeError) return setError(pincodeError)
 
-      if (!isPincodeVerified) return setError("Please verify your pincode.");
+      if (!isPincodeVerified) return setError("Please verify your pincode.")
 
-      return animateOut("next", () => setStep((prev) => prev + 1));
+      return animateOut("next", () => setStep((prev) => prev + 1))
     }
 
+    // Handle bill validation
     if (current.id === "bill") {
-      const selected = payload.selectedBillType;
-      const value = payload[selected]?.trim();
+      const selected = payload.selectedBillType
+      if (!selected) return setError("Please select an option.")
 
-      if (!selected) return setError("Please select an option.");
-      const err = validateInput(selected, value);
-      if (err) return setError(err);
+      const value = payload[selected]?.trim()
+      const billError = validateInput(selected, value)
+      if (billError) return setError(billError)
 
-      return animateOut("next", () => setStep((prev) => prev + 1));
+      return animateOut("next", () => setStep((prev) => prev + 1))
     }
 
+    // Handle moreInfo validation
     if (current.id === "moreInfo") {
-      if (!payload.moreInfo) return setError("Please select an option.");
-      if (payload.moreInfo === "option1") {
-        return animateOut("next", () => setStep((prev) => prev + 1));
+      if (!payload.moreInfo) return setError("Please select an option.")
+
+      if (payload.moreInfoKey === "option1") {
+        return animateOut("next", () => setStep((prev) => prev + 1))
       } else {
-        setTimeout(() => handleSubmit(), 1000);
-        return;
+        // For option2, proceed to submit after delay
+        setTimeout(() => handleSubmit(), 1000)
+        return
       }
     }
 
+    // Handle followUp validation - FIXED: Always show next button
     if (current.id === "followUp") {
-      if (!payload.followUp) return setError("Please select an option.");
-      // actual flow is handled via `handleRadioFollowup`, so just stop here
-      return;
+      if (!payload.followUp) return setError("Please select an option.")
+
+      // Handle different followUp options when Next is clicked
+      if (payload.followUpKey === "shared") {
+        alert("Thank you so much for your promptness!")
+        return handleSubmit()
+      } else if (payload.followUpKey === "notHandy") {
+        setPayload((prev) => ({ ...prev, awaitingContactDetails: true }))
+        return animateOut("next", () => setStep(6)) // userPhone step
+      } else if (payload.followUpKey === "notWilling") {
+        return handleSubmit()
+      }
+
+      return animateOut("next", () => setStep((prev) => prev + 1))
     }
 
-    const value = payload[current.id]?.trim();
-    const err = validateInput(current.id, value);
-    if (err) return setError(err);
+    // Handle userPhone validation
+    if (current.id === "userPhone") {
+      const phoneError = validateInput("userPhone", payload.userPhone)
+      if (phoneError) return setError(phoneError)
 
-    animateOut("next", () => setStep((prev) => prev + 1));
-  };
-
-  const back = () => {
-    if (step > 0) {
-      setError("");
-      animateOut("back", () => setStep((prev) => prev - 1));
+      if (payload.awaitingContactDetails) {
+        return animateOut("next", () => setStep((prev) => prev + 1)) // to email
+      } else {
+        return handleSubmit()
+      }
     }
-  };
 
-  const handleSubmit = async () => {
-    const finalPayload = {
-      ...payload,
-      bill: payload.selectedBillType
-        ? payload[payload.selectedBillType]
-        : payload.bill,
-    };
-    delete finalPayload.selectedBillType;
-    delete finalPayload.monthlyBill;
-    delete finalPayload.monthlyUnits;
+    // Handle userEmail validation
+    if (current.id === "userEmail") {
+      const emailError = validateInput("userEmail", payload.userEmail)
+      if (emailError) return setError(emailError)
+      return handleSubmit()
+    }
+
+    // Handle default validation
+    const value = payload[current.id]?.trim()
+    const inputError = validateInput(current.id, value)
+    if (inputError) return setError(inputError)
+
+    animateOut("next", () => setStep((prev) => prev + 1))
+  }, [step, payload, isPincodeVerified, isSubmitting, validateInput, animateOut])
+
+  const back = useCallback(() => {
+    if (step > 0 && !isSubmitting) {
+      setError("")
+      animateOut("back", () => setStep((prev) => prev - 1))
+    }
+  }, [step, isSubmitting, animateOut])
+
+  const handleSubmit = useCallback(async () => {
+    if (isSubmitting) return
+
+    setIsSubmitting(true)
+    setError("")
 
     try {
-      const res = await post("/api/trackSolarDevice", finalPayload);
-      navigate("/dashboard", { state: res });
+      const finalPayload = {
+        ...payload,
+        bill: payload.selectedBillType ? payload[payload.selectedBillType] : payload.bill,
+      }
+
+      // Clean up temporary fields
+      delete finalPayload.selectedBillType
+      delete finalPayload.monthlyBill
+      delete finalPayload.monthlyUnits
+      delete finalPayload.awaitingContactDetails
+      delete finalPayload.followUpKey
+      delete finalPayload.moreInfoKey
+
+      const res = await post("/api/trackSolarDevice", finalPayload)
+      navigate("/dashboard", { state: res })
     } catch (err) {
-      setError("Failed to submit. Please try again later.");
+      console.error("Submission error:", err)
+      setError("Failed to submit. Please try again later.")
+    } finally {
+      setIsSubmitting(false)
     }
-  };
+  }, [payload, isSubmitting, navigate])
+
+  const handlePincodeVerification = useCallback(async (pincode) => {
+    if (!pincode || !validationRules.pincode.regex.test(pincode)) return
+
+    setError("Validating Pincode...")
+
+    try {
+      // Simulate API call - replace with actual API call when ready
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      setIsPincodeVerified(true)
+      setError("")
+    } catch (err) {
+      setError("Pincode verification failed. Please try again.")
+      setIsPincodeVerified(false)
+    }
+  }, [])
+
+  const updatePayload = useCallback((key, value) => {
+    setPayload((prev) => ({ ...prev, [key]: value }))
+    setError("")
+  }, [])
 
   useEffect(() => {
-    if (step >= 0 && step < questions.length) animateIn();
-  }, [step]);
+    if (step >= 0 && step < questions.length) {
+      animateIn()
+    }
+  }, [step, animateIn])
+
+  // Cleanup GSAP on unmount
+  useEffect(() => {
+    return () => {
+      if (questionRef.current) {
+        gsap.killTweensOf(questionRef.current)
+      }
+    }
+  }, [])
+
+  const currentQuestion = step >= 0 && step < questions.length ? questions[step] : null
+  const isLastStep = step === questions.length - 1
+
   return (
     <div className="fixed inset-0 z-50 h-screen w-screen flex flex-col bg-black text-white overflow-hidden">
       {/* Banner Image with Close Button */}
-      <div className="h-[18vh] w-full relative mb-3">
+      <div className="h-[50px] w-full relative mb-3">
         <img
-          src={solarImage}
-          alt="Banner"
+          src={solarImage || "/placeholder.svg"}
+          alt="Solar Banner"
           className="w-full h-full object-cover opacity-80"
         />
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-yellow z-30 rounded-full border border-white p-2"
+          className="absolute top-4 right-4 text-white hover:text-yellow z-30 rounded-full border border-white p-2 transition-colors"
+          aria-label="Close modal"
         >
           <X className="w-6 h-6" />
         </button>
       </div>
 
-      {/* Progress bar */}
+      {/* Progress Bar */}
       {step >= 0 && step < questions.length && (
-        <div className="px-6 md:px-20 pt-2 pb-2">
-          <div className="text-subheading font-bold text-white mb-1">
+        <div className="w-full px-4 md:px-8 pt-2 pb-2">
+          <div className="text-lg font-bold text-white mb-1">
             Question {step + 1} of {questions.length}
           </div>
           <div className="flex gap-1 justify-start">
             {questions.map((_, i) => (
               <div
                 key={i}
-                className={`h-2 flex-1 rounded-full ${
-                  i < step
-                    ? "bg-green"
-                    : i === step
-                    ? "bg-yellow"
-                    : "bg-white/30"
+                className={`h-2 flex-1 rounded-full transition-colors ${
+                  i < step ? "bg-green" : i === step ? "bg-yellow" : "bg-white/30"
                 }`}
               />
             ))}
@@ -666,228 +391,227 @@ export default function ModalForm({ onClose }) {
         </div>
       )}
 
-      {/* Content Wrapper */}
-      <div className="flex-1 px-6 md:px-20 pt-6 flex flex-col items-start overflow-y-auto pb-10 relative">
-        <h1 className="font-bold text-subheading mb-1 bg-green p-3 rounded">
-          TheSolarHome
-        </h1>
-        <p className="text-para mb-6 mt-2 text-yellow">
-          India's First Solar Calculator
-        </p>
+      {/* Content Section */}
+      <div className="flex-1 px-4 md:px-8 pt-2 flex flex-col items-start overflow-y-auto pb-10 w-full">
+        <h1 className="text-subHeading mb-1 bg-green p-1 rounded">TheSolarHome</h1>
+        <p className="text-1xl mb-5 mt-1 ">India's First Solar Calculator</p>
 
         {/* Welcome Screen */}
         {step === -1 ? (
           <div className="space-y-8 max-w-2xl">
-            <p className="text-para text-white">
-              Welcome to 'The Solar Home', your one stop platform to begin your
-              Solar Journey.
+            <p className="text-base text-white">
+              Welcome to 'The Solar Home', your one stop platform to begin your Solar Journey.
             </p>
-            <SolarButton
-              className="flex content-center items-center gap-1"
-              onClick={() => setStep(0)}
-            >
+            <SolarButton className="flex items-center gap-2" onClick={() => setStep(0)}>
               Sounds Good <ArrowRight className="w-6 h-6" />
             </SolarButton>
           </div>
         ) : (
-          <>
-            <div ref={questionRef} className="w-full space-y-6">
-              {questions[step] && (
-                <>
-                  <h2 className="text-subheading mb-3">
-                    {questions[step].label}
-                  </h2>
-                  <p className="text-sm text-gray-300 mb-5">
-                    {questions[step].description}
-                  </p>
+          currentQuestion && (
+            <>
+              <div ref={questionRef} className="w-full space-y-1">
+                <h2 className="text-3xl text-yellow mb-1">{currentQuestion.label}</h2>
+                <p className="text-para  text-grey mb-1"> ({currentQuestion.description})</p>
 
-                  {/* Dual Input (Address & Pincode) */}
-                  {questions[step].type === "dualInput" && (
-                    <div className="flex flex-col md:flex-row gap-4 w-full">
-                      {questions[step].fields.map((field) => (
+                {/* Dual Input (Address & Pincode) */}
+                {currentQuestion.type === "dualInput" && currentQuestion.fields && (
+                  <div className="flex flex-col md:flex-row gap-4 w-full" style={{marginTop:"20px"}}>
+                    {currentQuestion.fields.map((field) => (
+                      <div key={field.key} className="flex-1">
+                        <label className="block text-sm text-gray-300 mb-1">{field.label}</label>
                         <input
-                          key={field.key}
-                          type="text"
+                          type={field.numeric ? "tel" : "text"}
                           placeholder={field.placeholder}
                           value={payload[field.key] || ""}
                           onChange={(e) => {
-                            setPayload((prev) => ({
-                              ...prev,
-                              [field.key]: e.target.value,
-                            }));
-                            setError("");
+                            if (field.numeric) {
+                              handleNumericInput(e, field.key)
+                            } else {
+                              updatePayload(field.key, e.target.value)
+                            }
                           }}
                           onBlur={() => {
                             if (field.key === "pincode") {
-                              // Future Pincode Verification
-                              // const res = await post("/api/verifyPincode", { pincode: payload.pincode });
-                              setIsPincodeVerified(true);
+                              handlePincodeVerification(payload.pincode)
                             }
                           }}
-                          className="w-full bg-transparent border-b border-yellow text-white py-3 placeholder-gray-400 focus:outline-none"
+                          onKeyPress={(e) => {
+                            if (field.numeric && !/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete") {
+                              e.preventDefault()
+                            }
+                          }}
+                          className="w-full bg-transparent border border-yellow text-white py-2 p-2 placeholder-gray focus:outline-none focus:border-yellow-300 transition-colors"
                         />
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Bill Options Radio + Input */}
-                  {questions[step].type === "radioInput" && (
-                    <>
-                      <div className="flex flex-col gap-4">
-                        {questions[step].options.map((option) => (
-                          <label
-                            key={option.key}
-                            className={`flex items-center gap-3 cursor-pointer border p-3 rounded-lg ${
-                              payload.selectedBillType === option.key
-                                ? "border-yellow bg-white/10"
-                                : "border-white/30"
-                            }`}
-                            onClick={() => {
-                              setPayload((prev) => ({
-                                ...prev,
-                                selectedBillType: option.key,
-                              }));
-                              setError("");
-                            }}
-                          >
-                            <input
-                              type="radio"
-                              checked={
-                                payload.selectedBillType === option.key
-                              }
-                              onChange={() => {}}
-                              className="accent-yellow"
-                            />
-                            {option.label}
-                          </label>
-                        ))}
                       </div>
-                      {payload.selectedBillType && (
+                    ))}
+                  </div>
+                )}
+
+                {/* Bill Type Radio + Input */}
+                {currentQuestion.type === "radioInput" && currentQuestion.options && (
+                  <>
+                    <div className="flex flex-col gap-4">
+                      {currentQuestion.options.map((option) => (
+                        <label
+                          key={option.key}
+                          className={`flex items-center gap-3 cursor-pointer border p-4 rounded-lg transition-colors ${
+                            payload.selectedBillType === option.key
+                              ? "border-yellow bg-white/10"
+                              : "border-white/30 hover:border-white/50"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="billType"
+                            checked={payload.selectedBillType === option.key}
+                            onChange={() => updatePayload("selectedBillType", option.key)}
+                            className="accent-yellow"
+                          />
+                          <span>{option.label}</span>
+                        </label>
+                      ))}
+                    </div>
+
+                    {payload.selectedBillType && (
+                      <input
+                        type="tel"
+                        placeholder={`Enter ${payload.selectedBillType === "monthlyBill" ? "amount in ₹" : "units in kWh"}`}
+                        className="w-full bg-transparent border-b border-yellow text-white py-3 placeholder-gray mt-4 focus:outline-none focus:border-yellow-300 transition-colors"
+                        value={payload[payload.selectedBillType] || ""}
+                        onChange={(e) => handleNumericInput(e, payload.selectedBillType)}
+                        onKeyPress={(e) => {
+                          if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "Delete") {
+                            e.preventDefault()
+                          }
+                        }}
+                      />
+                    )}
+                  </>
+                )}
+
+                {/* More Info Radio */}
+                {currentQuestion.type === "radioInfo" && currentQuestion.options && (
+                  <div className="flex flex-col gap-4">
+                    {currentQuestion.options.map((opt) => (
+                      <label
+                        key={opt.key}
+                        className={`border p-4 rounded-lg cursor-pointer transition-colors ${
+                          payload.moreInfoKey === opt.key
+                            ? "border-yellow bg-white/10"
+                            : "border-white/30 hover:border-white/50"
+                        }`}
+                      >
                         <input
-                          type="text"
-                          placeholder="Enter value"
-                          className="w-full bg-transparent border-b border-yellow text-white py-3 placeholder-gray-400 mt-4"
-                          value={payload[payload.selectedBillType] || ""}
-                          onChange={(e) => {
-                            setPayload((prev) => ({
-                              ...prev,
-                              [payload.selectedBillType]: e.target.value,
-                            }));
-                            setError("");
+                          type="radio"
+                          name="moreInfo"
+                          className="mr-3 accent-yellow"
+                          checked={payload.moreInfoKey === opt.key}
+                          onChange={() => {
+                            updatePayload("moreInfo", opt.label)
+                            updatePayload("moreInfoKey", opt.key)
                           }}
                         />
-                      )}
-                    </>
-                  )}
-                  {/* Radio Question (More Info) */}
-                  {questions[step].type === "radioInfo" && (
-                    <div className="flex flex-col gap-4">
-                      {questions[step].options.map((opt) => (
-                        <label
-                          key={opt.key}
-                          className={`border p-3 rounded-lg cursor-pointer hover:border-yellow ${
-                            payload.moreInfo === opt.key
-                              ? "border-yellow bg-white/10"
-                              : "border-white/30"
-                          }`}
-                          onClick={() => {
-                            setPayload((prev) => ({
-                              ...prev,
-                              moreInfo: opt.key,
-                            }));
-                            setError("");
-                          }}
-                        >
-                          <input
-                            type="radio"
-                            name="moreInfo"
-                            className="mr-2 accent-yellow"
-                            checked={payload.moreInfo === opt.key}
-                            onChange={() => {}}
-                          />
-                          {opt.label}
-                        </label>
-                      ))}
-                    </div>
-                  )}
+                        <span>{opt.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
 
-                  {/* Follow Up Options (3 options) */}
-                  {questions[step].type === "radioFollowup" && (
-                    <div className="flex flex-col gap-4">
-                      {questions[step].options.map((opt) => (
-                        <label
-                          key={opt.key}
-                          className={`border p-3 rounded-lg cursor-pointer hover:border-yellow ${
-                            payload.followUp === opt.key
-                              ? "border-yellow bg-white/10"
-                              : "border-white/30"
-                          }`}
-                          onClick={() => handleRadioFollowup(opt.key)}
-                        >
-                          <input
-                            type="radio"
-                            name="followUp"
-                            className="mr-2 accent-yellow"
-                            checked={payload.followUp === opt.key}
-                            onChange={() => {}}
-                          />
-                          {opt.label}
-                        </label>
-                      ))}
-                    </div>
-                  )}
+                {/* Follow Up Options */}
+                {currentQuestion.type === "radioFollowup" && currentQuestion.options && (
+                  <div className="flex flex-col gap-4">
+                    {currentQuestion.options.map((opt) => (
+                      <label
+                        key={opt.key}
+                        className={`border p-4 rounded-lg cursor-pointer transition-colors ${
+                          payload.followUpKey === opt.key
+                            ? "border-yellow bg-white/10"
+                            : "border-white/30 hover:border-white/50"
+                        }`}
+                        onClick={() => handleRadioFollowup(opt.key)}
+                      >
+                        <input
+                          type="radio"
+                          name="followUp"
+                          className="mr-3 accent-yellow"
+                          checked={payload.followUpKey === opt.key}
+                          onChange={() => {}}
+                        />
+                        <span>{opt.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
 
-                  {/* Default Input Field */}
-                  {!questions[step].type && (
-                    <input
-                      type="text"
-                      className="w-full bg-transparent border-b border-yellow text-white placeholder-gray-400 py-3 focus:outline-none"
-                      placeholder="Type your answer..."
-                      value={payload[questions[step].id] || ""}
-                      onChange={(e) => {
-                        setPayload((prev) => ({
-                          ...prev,
-                          [questions[step].id]: e.target.value,
-                        }));
-                        setError("");
-                      }}
-                    />
-                  )}
+                {/* Default Input */}
+                {!currentQuestion.type && (
+                  <input
+                    type={
+                      currentQuestion.id === "userEmail"
+                        ? "email"
+                        : currentQuestion.numeric || currentQuestion.id === "userPhone"
+                          ? "tel"
+                          : "text"
+                    }
+                    className="w-full bg-transparent border-b border-yellow text-white placeholder-gray py-3 focus:outline-none focus:border-yellow-300 transition-colors"
+                    placeholder="Type your answer..."
+                    value={payload[currentQuestion.id] || ""}
+                    onChange={(e) => {
+                      if (currentQuestion.numeric || currentQuestion.id === "userPhone") {
+                        handleNumericInput(e, currentQuestion.id)
+                      } else {
+                        updatePayload(currentQuestion.id, e.target.value)
+                      }
+                    }}
+                    onKeyPress={(e) => {
+                      if (
+                        (currentQuestion.numeric || currentQuestion.id === "userPhone") &&
+                        !/[0-9]/.test(e.key) &&
+                        e.key !== "Backspace" &&
+                        e.key !== "Delete"
+                      ) {
+                        e.preventDefault()
+                      }
+                    }}
+                  />
+                )}
 
-                  {/* Error Message */}
-                  {error && (
-                    <p className="text-red-300 mt-2 text-sm font-medium">
-                      {error}
-                    </p>
-                  )}
-                </>
-              )}
-            </div>
+                {/* Error Display */}
+                {error && (
+                  <p className="text-red mt-2 text-sm font-medium" role="alert">
+                    {error}
+                  </p>
+                )}
+              </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-5 w-full">
-              <button
-                onClick={back}
-                disabled={step === 0}
-                className="rounded-full p-4 bg-white/10 text-white hover:bg-white hover:text-black transition disabled:opacity-30"
-              >
-                <ArrowLeft className="w-6 h-6" />
-              </button>
+              {/* Navigation Buttons */}
+              <div className="flex justify-between mt-8 w-full">
+                <button
+                  onClick={back}
+                  disabled={step === 0 || isSubmitting}
+                  className="rounded-full p-4 bg-white/10 text-white hover:bg-white hover:text-black transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  aria-label="Go back"
+                >
+                  <ArrowLeft className="w-6 h-6" />
+                </button>
 
-              {step === questions.length - 1 ? (
-                <SolarButton onClick={handleSubmit}>
-                  <Send className="w-6 h-6" />
-                </SolarButton>
-              ) : (
-                <SolarButton onClick={validateAndNext}>
-                  {questions[step].buttonText}
-                  <ArrowRight className="w-6 h-6" />
-                </SolarButton>
-              )}
-            </div>
-          </>
+                {/* Always show Next/Submit button */}
+                {isLastStep ? (
+                  <SolarButton onClick={handleSubmit} disabled={isSubmitting} className="flex items-center gap-2">
+                    {isSubmitting ? "Submitting..." : "Submit"}
+                    <Send className="w-6 h-6" />
+                  </SolarButton>
+                ) : (
+                  <SolarButton onClick={validateAndNext} disabled={isSubmitting} className="flex items-center gap-2">
+                    {currentQuestion.buttonText}
+                    <ArrowRight className="w-6 h-6" />
+                  </SolarButton>
+                )}
+              </div>
+            </>
+          )
         )}
       </div>
     </div>
-  );
+  )
 }
