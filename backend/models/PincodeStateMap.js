@@ -5,4 +5,4 @@ const PincodeStateSchema = new mongoose.Schema({
   statename: { type: String, required: true },
 });
 
-export default mongoose.model("PincodeStateMap", PincodeStateSchema);
+export default mongoose.model("PincodeStateMap", PincodeStateSchema, "pincodes");

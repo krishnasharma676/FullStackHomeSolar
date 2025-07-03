@@ -3,69 +3,97 @@ import TariffTable from "../models/StateElectricityTariffsTable.js";
 import PincodeTable from "../models/PincodeStateMap.js";
 
 export const calculateBillChart = async ({ billAmount, pincode }) => {
-  try {
-    console.log("Input Payload:", { billAmount, pincode });
 
-    const monthlyBill = parseFloat(billAmount);
-    console.log(" Parsed Monthly Bill:", monthlyBill);
+  function calculateElectricityData({
+    currentMonthlyBill,
+    currentYear,
+    currentCharge,
+    yoyIncreasePct,
+    endYear = currentYear - 5
+  }) {
+    const data = {};
 
-    const baseAnnualBill = monthlyBill * 12;
-    console.log(" Base Annual Bill (Monthly x 12):", baseAnnualBill);
+    // Compute baseline consumption from current values
+    const annualBillCurrent = currentMonthlyBill * 12;
+    const monthlyKwh = annualBillCurrent / (currentCharge * 12);
 
-    // 1. Get YOY Increase % from DB
-    const inflationConfig = await AppConfig.findOne({ key: "inflationRate" });
-    console.log(" Fetched Inflation Config from DB:", inflationConfig);
+    // Year-by-year
+    for (let year = currentYear; year >= endYear; year--) {
+      // Calculate per-unit charge for this year
+      const yearsBack = currentYear - year;
+      // Reverse compound increase: charge_year = currentCharge / ((1 + r)^yearsBack)
+      const charge = currentCharge / Math.pow(1 + yoyIncreasePct / 100, yearsBack);
 
-    const yoyIncrease = parseFloat(inflationConfig?.value || 0.04);
-    console.log(" YOY Tariff Increase (%):", yoyIncrease);
+      // Annual bill = constant consumption × charge × 12
+      const annualBill = monthlyKwh * charge * 12;
 
-    // 2. Get STATE using pincode
-    const pincodeDoc = await PincodeTable.findOne({ pincode: pincode });
-    console.log(" Pincode Document:", pincodeDoc);
-
-    if (!pincodeDoc || !pincodeDoc.state) {
-      throw new Error("State not found for this pincode");
+      data[year] = {
+        charge,
+        monthlyKwh,
+        annualBill
+      };
     }
 
-    const stateName = pincodeDoc.state;
-    console.log(" State found for Pincode:", stateName);
+    // Percentage increase from endYear to currentYear
+    const billStart = data[endYear].annualBill;
+    const billEnd = data[currentYear].annualBill;
+    const pctIncrease = ((billEnd - billStart) / billStart) * 100;
 
-    // 3. Get Per-Unit Charge using state
-    const stateTariff = await TariffTable.findOne({ state: stateName });
-    console.log("Tariff Entry for State:", stateTariff);
+    return { data, pctIncrease };
+  }
+
+  try {
+    console.log("Input Payload:", { billAmount, pincode });
+    const currentyear = new Date().getFullYear();
+    const monthlyBill = parseFloat(billAmount);
+    const baseAnnualBill = monthlyBill * 12;
+
+    // 3. Get state using pincode
+    const pincodeString = String(pincode).trim();
+    const pincodeDoc = await PincodeTable.findOne({ pincode: pincodeString });
+    if (!pincodeDoc || !pincodeDoc.statename) {
+      throw new Error("State not found for this pincode");
+    }
+    const stateName = pincodeDoc.statename;
+    console.log("State found for Pincode:", stateName);
+
+    // 4. Get tariff using state name (case-insensitive match)
+    const stateTariff = await TariffTable.findOne({
+      state: { $regex: new RegExp(`^${stateName}$`, "i") },
+    });
 
     if (!stateTariff || !stateTariff.highestTariffSlab) {
       throw new Error("Tariff not found for this state");
     }
+    const currentPerUnitChargekwh = parseFloat(stateTariff.highestTariffSlab);
+    console.log("Per-Unit Charge (₹/kWh):", currentPerUnitChargekwh);
 
-    const perUnitCharge = parseFloat(stateTariff.highestTariffSlab);
-    console.log(" Per-Unit Charge (₹/kWh):", perUnitCharge);
+    // 2. Get YOY increase % from DB
+    const inflationConfig = await AppConfig.findOne({ key: "yoy" });
+    const yoy = parseFloat(inflationConfig?.value || 0.04);
+    console.log("YOY Tariff Increase (%):", yoy);
 
-    // 4. Calculate projected annual bills for 2025 to 2030
-    const projectedBills = [];
-    for (let i = 0; i <= 5; i++) {
-      const year = 2025 + i;
-      const projectedAnnualBill = baseAnnualBill * Math.pow(1 + yoyIncrease, i);
-      const monthlyConsumptionKwh = projectedAnnualBill / (perUnitCharge * 12);
+    const monthlyKwhConsumption = (baseAnnualBill / (currentPerUnitChargekwh * 12)).toFixed(2);
+    console.log("monthlyKWH", monthlyKwhConsumption);
 
-      const singleYearData = {
-        year,
-        projectedAnnualBill: Math.round(projectedAnnualBill),
-        monthlyConsumption: Math.round(monthlyConsumptionKwh),
-        yoyPercentage: +(i === 0
-          ? 0
-          : ((Math.pow(1 + yoyIncrease, i) - 1) * 100).toFixed(2)),
-      };
+    const { data, pctIncrease } = calculateElectricityData({
+      currentMonthlyBill: monthlyBill,
+      currentYear: currentyear,
+      currentCharge: currentPerUnitChargekwh,
+      yoyIncreasePct: yoy,
+      endYear: 2020
+    });
+    console.table(
+      Object.keys(data).sort((a, b) => b - a).map(year => ({
+        Year: year,
+        'Per‑Unit Charge (₹/kWh)': data[year].charge.toFixed(2),
+        'Annual Electricity Bill (₹)': data[year].annualBill.toFixed(0)
+      }))
+    );
+    console.log(`Increase (${endYear}→${currentYear}): ${pctIncrease.toFixed(2)}%`);
 
-      console.log(`Year ${year} Projection:`, singleYearData);
-      projectedBills.push(singleYearData);
-    }
 
-    console.log("Final Projected Bill Array:", projectedBills);
 
-    return {
-      projectedBillNextSixYears: projectedBills,
-    };
   } catch (error) {
     console.error("Error in calculateBillChart:", error);
     return { projectedBillNextSixYears: [] };

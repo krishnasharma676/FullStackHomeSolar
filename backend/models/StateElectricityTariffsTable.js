@@ -6,4 +6,5 @@ const TariffSchema = new mongoose.Schema({
   highestTariffSlab: { type: Number, required: true },
 });
 
-export default mongoose.model("StateElectricityTariffsTable", TariffSchema);
+// 👇 force exact collection name as in Atlas
+export default mongoose.model("StateElectricityTariffsTable", TariffSchema, "StateElectricityTariffsTable");
