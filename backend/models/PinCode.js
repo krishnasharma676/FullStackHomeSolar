@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const PincodeSchema = new mongoose.Schema({
   circlename: { type: String, required: true },
@@ -14,4 +14,4 @@ const PincodeSchema = new mongoose.Schema({
   longitude: { type: Number, default: null },
 });
 
-module.exports = mongoose.model("Pincode", PincodeSchema);
+export default mongoose.model("Pincode", PincodeSchema);

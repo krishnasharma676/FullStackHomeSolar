@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import csv from "csv-parser";
 import connectDB from "./config/db.js";
-import Pincode from "./models/PinCode.js";
+import Pincode from "./models/Pincode.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
