@@ -1,8 +1,6 @@
-import { calculateBillChart } from "./billChartController.js";
-import { calculateCo2Chart } from "./co2ChartController.js";
-import { calculateSavingsChart } from "./savingsChartController.js";
+// import { calculateBillChart } from "./billChartController.js";
+import { nextFiveYearbillData } from "./nextFiveYearbillData.js";
 import User from "../models/User.js";
-import AppConfig from "../models/AppConfig.js";
 
 export const calculateSolarData = async (req, res) => {
   try {
@@ -17,26 +15,16 @@ export const calculateSolarData = async (req, res) => {
       location: input.location,
     });
 
-    // ✅ Fetch config values from DB
-    // const unitRate = await AppConfig.findOne({ key: 'unitRatePerKW' });
-    // const roi = await AppConfig.findOne({ key: 'co2SavedPerKW' });
-
-    // console.log('✅ Config Values:');
-    // console.log('Unit Rate:', unitRate.value);
-    // console.log('ROI %:', roi.value);
-
     // all charts show
-    const billData = await calculateBillChart(input);
-    const co2Data = calculateCo2Chart(input);
-    const savingsData = calculateSavingsChart(input);
+    // const billData = await calculateBillChart(input);
+    const nextFiveYear = await nextFiveYearbillData(input);
 
     const response = {
       userId: savedUser._id,
       name: savedUser.name,
       email: savedUser.email,
-      ...billData,
-      ...co2Data,
-      ...savingsData,
+      // ...billData,
+      ...nextFiveYear,
     };
 
     res.status(200).json(response);

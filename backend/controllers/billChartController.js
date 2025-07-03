@@ -3,13 +3,12 @@ import TariffTable from "../models/StateElectricityTariffsTable.js";
 import PincodeTable from "../models/PincodeStateMap.js";
 
 export const calculateBillChart = async ({ billAmount, pincode }) => {
-
   function calculateElectricityData({
     currentMonthlyBill,
     currentYear,
     currentCharge,
     yoyIncreasePct,
-    endYear = currentYear - 5
+    endYear = currentYear - 5,
   }) {
     const data = {};
 
@@ -22,7 +21,8 @@ export const calculateBillChart = async ({ billAmount, pincode }) => {
       // Calculate per-unit charge for this year
       const yearsBack = currentYear - year;
       // Reverse compound increase: charge_year = currentCharge / ((1 + r)^yearsBack)
-      const charge = currentCharge / Math.pow(1 + yoyIncreasePct / 100, yearsBack);
+      const charge =
+        currentCharge / Math.pow(1 + yoyIncreasePct / 100, yearsBack);
 
       // Annual bill = constant consumption × charge × 12
       const annualBill = monthlyKwh * charge * 12;
@@ -30,7 +30,7 @@ export const calculateBillChart = async ({ billAmount, pincode }) => {
       data[year] = {
         charge,
         monthlyKwh,
-        annualBill
+        annualBill,
       };
     }
 
@@ -73,27 +73,29 @@ export const calculateBillChart = async ({ billAmount, pincode }) => {
     const yoy = parseFloat(inflationConfig?.value || 0.04);
     console.log("YOY Tariff Increase (%):", yoy);
 
-    const monthlyKwhConsumption = (baseAnnualBill / (currentPerUnitChargekwh * 12)).toFixed(2);
+    const monthlyKwhConsumption = (
+      baseAnnualBill /
+      (currentPerUnitChargekwh * 12)
+    ).toFixed(2);
     console.log("monthlyKWH", monthlyKwhConsumption);
 
-    const { data, pctIncrease } = calculateElectricityData({
+    const { data } = calculateElectricityData({
       currentMonthlyBill: monthlyBill,
       currentYear: currentyear,
       currentCharge: currentPerUnitChargekwh,
       yoyIncreasePct: yoy,
-      endYear: 2020
+      endYear: 2020,
     });
     console.table(
-      Object.keys(data).sort((a, b) => b - a).map(year => ({
-        Year: year,
-        'Per‑Unit Charge (₹/kWh)': data[year].charge.toFixed(2),
-        'Annual Electricity Bill (₹)': data[year].annualBill.toFixed(0)
-      }))
+      Object.keys(data)
+        .sort((a, b) => b - a)
+        .map((year) => ({
+          Year: year,
+          "Per‑Unit Charge (₹/kWh)": data[year].charge.toFixed(2),
+          "Annual Electricity Bill (₹)": data[year].annualBill.toFixed(0),
+        }))
     );
-    console.log(`Increase (${endYear}→${currentYear}): ${pctIncrease.toFixed(2)}%`);
-
-
-
+    // console.log(`Increase (${endYear}→${currentYear}): ${pctIncrease.toFixed(2)}%`);
   } catch (error) {
     console.error("Error in calculateBillChart:", error);
     return { projectedBillNextSixYears: [] };
