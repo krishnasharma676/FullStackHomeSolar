@@ -25,7 +25,7 @@ export default function SaveEarth() {
           </p>
         </div>
 
-        {/* 🌞 Sun GIF */}
+
         <div className="flex flex-col items-center gap-4 p-6 bg-gray-50 rounded-xl shadow hover:shadow-md transition">
           <img
             src={middlesun}
@@ -39,7 +39,6 @@ export default function SaveEarth() {
           </p>
         </div>
 
-        {/* 🌻 Flower GIF */}
         <div className="flex flex-col items-center gap-4 p-6 bg-gray-50 rounded-xl shadow hover:shadow-md transition">
           <img
             src={flower}

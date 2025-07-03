@@ -49,14 +49,13 @@ export default function SolarBenefitsSection() {
       className="w-full h-screen flex items-center justify-center px-4 md:px-12 text-white"
     >
       <div className="flex flex-col items-center w-full max-w-7xl gap-12">
-        {/* 🟨 Section Title */}
+      
         <h1 className="text-heading text-center font-bold">
           TheSolarHome <span className="text-green">Promise</span>
         </h1>
 
-        {/* 🧱 Grid Layout */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-20 items-center text-center">
-          {/* 💡 Top Left */}
+
           <div
             ref={(el) => (textRefs.current[0] = el)}
             className="flex flex-col gap-3 px-4"
@@ -67,7 +66,6 @@ export default function SolarBenefitsSection() {
             </p>
           </div>
 
-          {/* 🌞 Center Image */}
           <div className="row-span-2 flex justify-center items-center">
             <img
               ref={imageRef}
@@ -77,7 +75,6 @@ export default function SolarBenefitsSection() {
             />
           </div>
 
-          {/* 💡 Top Right */}
           <div
             ref={(el) => (textRefs.current[1] = el)}
             className="flex flex-col gap-3 px-4"
@@ -88,7 +85,7 @@ export default function SolarBenefitsSection() {
             </p>
           </div>
 
-          {/* 💡 Bottom Left */}
+
           <div
             ref={(el) => (textRefs.current[2] = el)}
             className="flex flex-col gap-3 px-4"
@@ -99,7 +96,6 @@ export default function SolarBenefitsSection() {
             </p>
           </div>
 
-          {/* 💡 Bottom Right */}
           <div
             ref={(el) => (textRefs.current[3] = el)}
             className="flex flex-col gap-3 px-4"

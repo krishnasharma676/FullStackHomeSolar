@@ -47,9 +47,7 @@ export default function PageLoader({ onFinish }) {
       className="fixed top-0 left-0 w-screen h-screen z-50 flex items-center justify-center text-white bg-gradient-to-br from-black "
     >
       <div className="relative z-10 flex flex-col items-center gap-10">
-        {/* 🔄 Circular Loader Ring */}
         <div className="relative w-60 h-60 flex items-center justify-center">
-          {/* SVG Ring */}
           <svg
             className="absolute w-full h-full"
             viewBox="0 0 100 100"
