@@ -4,10 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.cjs"
   },
   "keywords": [],
-  "author": "",
+  "author": "Krishna Sharma, Satyam Lal",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
@@ -19,5 +19,5 @@
   "devDependencies": {
     "cross-env": "^7.0.3"
   },
-  "description": ""
+  "description": "This is a FullStack Solar Home Project."
 }
