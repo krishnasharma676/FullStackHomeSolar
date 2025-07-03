@@ -1,24 +1,40 @@
-import AppConfig from "../models/AppConfig.js";
-import TariffTable from "../models/StateElectricityTariffsTable.js";
 import PincodeTable from "../models/PincodeStateMap.js";
+import StateAdoptionTable from "../models/StateAdoptionTable.js";
 
-export const solarAdoptionController = async ({ pincode }) => {
+export const solarAdoptionController = async ({pincode}) => {
   try {
-    // Lookup state
-    const pincodeDoc = await PincodeTable.findOne({ pincode: pincode.trim() });
-    if (!pincodeDoc) throw new Error("State not found for this pincode");
-    const stateName = pincodeDoc.statename;
+    const pincodeString = String(pincode).trim();
+    console.log("pincode-> yser",pincodeString);
+    
 
-    // Lookup tariff
-    const stateTariff = await TariffTable.findOne({
+    // Step 1: Get State from Pincode
+    const pincodeDoc = await PincodeTable.findOne({ pincode: pincodeString });
+    console.log("pincode-> doc",pincodeDoc);
+    if (!pincodeDoc || !pincodeDoc.statename) {
+      throw new Error("State not found for this pincode");
+    }
+
+    const stateName = String(pincodeDoc.statename).trim();
+
+    
+    const adoptionDoc = await StateAdoptionTable.findOne({
       state: new RegExp(`^${stateName}$`, "i"),
     });
-    if (!stateTariff) throw new Error("Tariff not found for this state");
-    const currentCharge = stateTariff.highestTariffSlab;
+    
+    console.log("State found for Pincode:", stateName);
+console.log("adoptionDoc----", adoptionDoc);
 
-    console.log(currentCharge);
-  } catch (error) {
-    console.error("Error in solarAdoptionController:", error);
-    return { projectedBillNextFiveYears: [], pctIncrease: 0 };
+if (!adoptionDoc || typeof adoptionDoc.total_score !== "number") {
+  throw new Error("Solar Adoption Score not found for this state");
+}
+
+const adoptionScore = adoptionDoc.total_score;
+
+return { adoptionScore };
+
+
+  } catch (err) {
+    console.error("Error in solarAdoptionController:", err);
+    return { state: null, totalScore: null, error: err.message };
   }
 };

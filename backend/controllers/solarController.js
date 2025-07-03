@@ -1,13 +1,13 @@
 import { calculateBillChart } from "./billChartController.js";
 import { nextFiveYearbillData } from "./nextFiveYearbillData.js";
-import { solatAdoptionTable } from "./solarAdoptionController.js";
+import { solarAdoptionController } from "./solarAdoptionController.js";
 import User from "../models/User.js";
 
 export const calculateSolarData = async (req, res) => {
   try {
     const input = req.body;
 
-    // ⬇️ Save user data to MongoDB
+    // ⬇Save user data to MongoDB
     const savedUser = await User.create({
       name: input.name,
       email: input.email,
@@ -19,7 +19,7 @@ export const calculateSolarData = async (req, res) => {
     // all charts show
     const billData = await calculateBillChart(input);
     const nextFiveYear = await nextFiveYearbillData(input);
-    const solarAdoption = await solatAdoptionTable(input);
+    const solarAdoption = await solarAdoptionController(input);
 
     const response = {
       userId: savedUser._id,
@@ -32,7 +32,7 @@ export const calculateSolarData = async (req, res) => {
 
     res.status(200).json(response);
   } catch (error) {
-    console.error("❌ Error saving user or calculating data:", error);
+    console.error(" Error saving user or calculating data:", error);
     res.status(500).json({ message: "Error processing solar data", error });
   }
 };

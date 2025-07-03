@@ -825,7 +825,7 @@ export default function ModalForm({ onClose }) {
       console.log("Final Payload:", finalPayload) // For debugging
 
       const res = await post("/api/trackSolarDevice", finalPayload)
-      // navigate("/dashboard", { state: res })
+      navigate("/dashboard", { state: res })
     } catch (err) {
       console.error("Submission error:", err)
       setError("Failed to submit. Please try again later.")

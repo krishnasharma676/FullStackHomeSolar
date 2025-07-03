@@ -60,7 +60,7 @@ export const nextFiveYearbillData = async ({ billAmount, pincode }) => {
 
     // Calculate
     const endYear = currentYear + 5;
-    const { data, pctIncrease } = calculateElectricityData({
+    const { data } = calculateElectricityData({
       currentMonthlyBill: monthlyBill,
       currentYear,
       currentCharge,
@@ -72,12 +72,11 @@ export const nextFiveYearbillData = async ({ billAmount, pincode }) => {
     const projectedBillNextFiveYears = Object.entries(data)
       .map(([year, vals]) => ({
         year: Number(year),
-        charge: vals.charge,
         annualBill: vals.annualBill,
       }))
       .sort((a, b) => a.year - b.year);
 
-    return { projectedBillNextFiveYears, pctIncrease };
+    return { projectedBillNextFiveYears };
   } catch (error) {
     console.error("Error in nextFiveYearbillData:", error);
     return { projectedBillNextFiveYears: [], pctIncrease: 0 };

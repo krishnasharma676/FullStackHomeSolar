@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 
-const StateAdoptionSchema = new mongoose.Schema({
+const SolarAdoptionSchema = new mongoose.Schema({
   state: { type: String, required: true },
-  totalScore: Number,
-  highestTariffSlab: { type: Number, required: true },
+  total_score: { type: Number, required: true }, // changed
 });
 
+
+// 👇 force exact collection name
 export default mongoose.model(
-  "solarAdoptionTable",
-  StateAdoptionSchema,
+  "SolarAdoptionTable",
+  SolarAdoptionSchema,
   "solarAdoptionTable"
 );

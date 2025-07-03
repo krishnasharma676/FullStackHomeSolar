@@ -86,15 +86,14 @@ export const calculateBillChart = async ({ billAmount, pincode }) => {
       yoyIncreasePct: yoy,
       endYear: 2020,
     });
-    console.table(
-      Object.keys(data)
-        .sort((a, b) => b - a)
-        .map((year) => ({
-          Year: year,
-          "Per‑Unit Charge (₹/kWh)": data[year].charge.toFixed(2),
-          "Annual Electricity Bill (₹)": data[year].annualBill.toFixed(0),
-        }))
-    );
+    const LastFiveYearBillChart = Object.entries(data)
+      .map(([year, vals]) => ({
+        year: Number(year),
+        annualBill: Math.round(vals.annualBill)
+      }))
+      .sort((a, b) => a.year - b.year);
+
+    return { LastFiveYearBillChart };
     // console.log(`Increase (${endYear}→${currentYear}): ${pctIncrease.toFixed(2)}%`);
   } catch (error) {
     console.error("Error in calculateBillChart:", error);
