@@ -720,7 +720,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="group bg-gradient-to-br from-gray-900 to-black border border-purple-500/20 rounded-2xl p-6 hover:border-purple-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
+          {/* <div className="group bg-gradient-to-br from-gray-900 to-black border border-purple-500/20 rounded-2xl p-6 hover:border-purple-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-purple-500/20 rounded-lg">
                 <Battery className="w-6 h-6 text-purple" />
@@ -736,10 +736,10 @@ const Dashboard = () => {
                 <div className="bg-gradient-to-r from-purple to-pink-500 h-2 rounded-full w-[65%]"></div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Row 4 */}
-          <div
+          {/* <div
             className="group bg-gradient-to-br from-gray-900 to-black border border-green-500/20 rounded-2xl p-6 hover:border-green-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer"
             onClick={() =>
               setActiveChart({
@@ -762,9 +762,9 @@ const Dashboard = () => {
               <h3 className="text-green font-bold text-sm">SAVINGS PROJECTION</h3>
             </div>
             {renderLineChart(staticSavingsData)}
-          </div>
+          </div> */}
 
-          <div className="group bg-gradient-to-br from-gray-900 to-black border border-green-500/20 rounded-2xl p-6 hover:border-green-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/20">
+          {/* <div className="group bg-gradient-to-br from-gray-900 to-black border border-green-500/20 rounded-2xl p-6 hover:border-green-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/20">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-green-500/20 rounded-lg">
                 <Zap className="w-6 h-6 text-green" />
@@ -778,9 +778,9 @@ const Dashboard = () => {
                 <div className="bg-green h-2 rounded-full w-[98%]"></div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className="group bg-gradient-to-br from-gray-900 to-black border border-yellow-500/20 rounded-2xl p-6 hover:border-yellow-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/20">
+          {/* <div className="group bg-gradient-to-br from-gray-900 to-black border border-yellow-500/20 rounded-2xl p-6 hover:border-yellow-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/20">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-yellow-500/20 rounded-lg">
                 <Sun className="w-6 h-6 text-yellow" />
@@ -792,7 +792,7 @@ const Dashboard = () => {
               <div className="text-gray text-sm mb-3">Hours/Year</div>
               <div className="text-lg font-bold text-green">Optimal ☀️</div>
             </div>
-          </div>
+          </div> */}
 
           <div className="group bg-gradient-to-br from-gray-900 to-black border border-yellow-500/20 rounded-2xl p-6 hover:border-yellow-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-yellow-500/20">
             <div className="flex items-center gap-3 mb-4">
