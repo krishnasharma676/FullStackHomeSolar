@@ -1,5 +1,6 @@
-// import { calculateBillChart } from "./billChartController.js";
+import { calculateBillChart } from "./billChartController.js";
 import { nextFiveYearbillData } from "./nextFiveYearbillData.js";
+import { solatAdoptionTable } from "./solarAdoptionController.js";
 import User from "../models/User.js";
 
 export const calculateSolarData = async (req, res) => {
@@ -16,15 +17,17 @@ export const calculateSolarData = async (req, res) => {
     });
 
     // all charts show
-    // const billData = await calculateBillChart(input);
+    const billData = await calculateBillChart(input);
     const nextFiveYear = await nextFiveYearbillData(input);
+    const solarAdoption = await solatAdoptionTable(input);
 
     const response = {
       userId: savedUser._id,
       name: savedUser.name,
       email: savedUser.email,
-      // ...billData,
+      ...billData,
       ...nextFiveYear,
+      ...solarAdoption,
     };
 
     res.status(200).json(response);
