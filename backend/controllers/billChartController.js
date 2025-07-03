@@ -1,10 +1,8 @@
-const AppConfig = require('../models/AppConfig');
-const TariffTable = require('../models/StateElectricityTariffsTable');
-const PincodeTable = require('../models/PincodeStateMap.js'); // adjust if named differently
 import AppConfig from "../models/AppConfig.js";
+import TariffTable from "../models/StateElectricityTariffsTable.js";
+import PincodeTable from "../models/PincodeStateMap.js";
 
-exports.calculateBillChart = async ({ billAmount, pincode }) => {
-export const calculateBillChart = async ({ bill }) => {
+export const calculateBillChart = async ({ billAmount, pincode }) => {
   try {
     console.log("Input Payload:", { billAmount, pincode });
 
@@ -15,7 +13,7 @@ export const calculateBillChart = async ({ bill }) => {
     console.log(" Base Annual Bill (Monthly x 12):", baseAnnualBill);
 
     // 1. Get YOY Increase % from DB
-    const inflationConfig = await AppConfig.findOne({ key: 'inflationRate' });
+    const inflationConfig = await AppConfig.findOne({ key: "inflationRate" });
     console.log(" Fetched Inflation Config from DB:", inflationConfig);
 
     const yoyIncrease = parseFloat(inflationConfig?.value || 0.04);
@@ -44,12 +42,6 @@ export const calculateBillChart = async ({ bill }) => {
     console.log(" Per-Unit Charge (₹/kWh):", perUnitCharge);
 
     // 4. Calculate projected annual bills for 2025 to 2030
-    const inflationConfig = await AppConfig.findOne({ key: "inflationRate" }); // inflation rate fetched from DB
-    const inflationRate = inflationConfig?.value || 0.06;
-
-    const monthlyBill = parseFloat(bill);
-    const baseAnnualBill = monthlyBill * 12;
-
     const projectedBills = [];
     for (let i = 0; i <= 5; i++) {
       const year = 2025 + i;
@@ -60,7 +52,9 @@ export const calculateBillChart = async ({ bill }) => {
         year,
         projectedAnnualBill: Math.round(projectedAnnualBill),
         monthlyConsumption: Math.round(monthlyConsumptionKwh),
-        yoyPercentage: +(i === 0 ? 0 : ((Math.pow(1 + yoyIncrease, i) - 1) * 100).toFixed(2))
+        yoyPercentage: +(i === 0
+          ? 0
+          : ((Math.pow(1 + yoyIncrease, i) - 1) * 100).toFixed(2)),
       };
 
       console.log(`Year ${year} Projection:`, singleYearData);
@@ -68,8 +62,6 @@ export const calculateBillChart = async ({ bill }) => {
     }
 
     console.log("Final Projected Bill Array:", projectedBills);
-
-    console.log(projectedBills);
 
     return {
       projectedBillNextSixYears: projectedBills,
