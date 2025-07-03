@@ -1,7 +1,8 @@
-const express = require('express');
+import express from "express";
+import { calculateSolarData } from "../controllers/solarController.js";
+
 const router = express.Router();
-const { calculateSolarData } = require('../controllers/solarController');
 
-router.post('/trackSolarDevice', calculateSolarData);
+router.post("/trackSolarDevice", calculateSolarData);
 
-module.exports = router;
+export default router;

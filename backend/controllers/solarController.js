@@ -1,10 +1,10 @@
-const { calculateBillChart } = require('./billChartController');
-const { calculateCo2Chart } = require('./co2ChartController');
-const { calculateSavingsChart } = require('./savingsChartController');
-const User = require('../models/User');
-const AppConfig = require('../models/AppConfig');
+import { calculateBillChart } from "./billChartController.js";
+import { calculateCo2Chart } from "./co2ChartController.js";
+import { calculateSavingsChart } from "./savingsChartController.js";
+import User from "../models/User.js";
+import AppConfig from "../models/AppConfig.js";
 
-exports.calculateSolarData = async (req, res) => {
+export const calculateSolarData = async (req, res) => {
   try {
     const input = req.body;
 
@@ -25,7 +25,7 @@ exports.calculateSolarData = async (req, res) => {
     // console.log('Unit Rate:', unitRate.value);
     // console.log('ROI %:', roi.value);
 
-    // all charts show 
+    // all charts show
     const billData = await calculateBillChart(input);
     const co2Data = calculateCo2Chart(input);
     const savingsData = calculateSavingsChart(input);

@@ -1,5 +1,4 @@
-// models/User.js
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -9,8 +8,8 @@ const userSchema = new mongoose.Schema({
   location: String,
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('Users', userSchema);
+export default mongoose.model("Users", userSchema);

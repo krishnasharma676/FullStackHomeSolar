@@ -1,8 +1,10 @@
 const AppConfig = require('../models/AppConfig');
 const TariffTable = require('../models/StateElectricityTariffsTable');
 const PincodeTable = require('../models/PincodeStateMap.js'); // adjust if named differently
+import AppConfig from "../models/AppConfig.js";
 
 exports.calculateBillChart = async ({ billAmount, pincode }) => {
+export const calculateBillChart = async ({ bill }) => {
   try {
     console.log("Input Payload:", { billAmount, pincode });
 
@@ -42,6 +44,12 @@ exports.calculateBillChart = async ({ billAmount, pincode }) => {
     console.log(" Per-Unit Charge (₹/kWh):", perUnitCharge);
 
     // 4. Calculate projected annual bills for 2025 to 2030
+    const inflationConfig = await AppConfig.findOne({ key: "inflationRate" }); // inflation rate fetched from DB
+    const inflationRate = inflationConfig?.value || 0.06;
+
+    const monthlyBill = parseFloat(bill);
+    const baseAnnualBill = monthlyBill * 12;
+
     const projectedBills = [];
     for (let i = 0; i <= 5; i++) {
       const year = 2025 + i;
@@ -60,6 +68,8 @@ exports.calculateBillChart = async ({ billAmount, pincode }) => {
     }
 
     console.log("Final Projected Bill Array:", projectedBills);
+
+    console.log(projectedBills);
 
     return {
       projectedBillNextSixYears: projectedBills,

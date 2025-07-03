@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const configSchema = new mongoose.Schema({
   key: { type: String, required: true, unique: true },
-  value: mongoose.Schema.Types.Mixed
+  value: mongoose.Schema.Types.Mixed,
 });
 
-module.exports = mongoose.model('AppConfig', configSchema);
+export default mongoose.model("AppConfig", configSchema);

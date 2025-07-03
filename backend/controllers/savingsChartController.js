@@ -1,4 +1,4 @@
-exports.calculateSavingsChart = ({ bill }) => {
+export const calculateSavingsChart = ({ bill }) => {
   const monthlySavings = parseInt(bill) * 0.8;
   const lifetimeSavings = Math.round(monthlySavings * 12 * 25); // 25 years
   const paybackYears = 6; // static example

@@ -1,10 +1,15 @@
-require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+import csv from "csv-parser";
+import connectDB from "./config/db.js";
+import Pincode from "./models/PinCode.js";
 
-const fs = require("fs");
-const path = require("path");
-const csv = require("csv-parser");
-const connectDB = require("./config/db");
-const Pincode = require("./models/PinCode");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
 const BATCH_SIZE = 5000;
 

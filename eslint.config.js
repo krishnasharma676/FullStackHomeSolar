@@ -1,33 +1,49 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 
 export default [
-  { ignores: ['dist'] },
+  // 1) Ignore build output and deps
+  { ignores: ["dist", "node_modules"] },
+
+  // 2) Backend — all .js under /backend, treated as ESM
   {
-    files: ['**/*.{js,jsx}'],
+    files: ["backend/**/*.js"],
     languageOptions: {
-      ecmaVersion: 2020,
+      globals: globals.node, // Node.js globals (process, Buffer, etc.)
+      parserOptions: {
+        ecmaVersion: 2022, // modern JS syntax
+        sourceType: "module", // enable import/export
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules, // standard ESLint rules for Node.js
+    },
+  },
+
+  // 3) Frontend — any .js/.jsx, treated as ESM with JSX
+  {
+    files: ["**/*.{js,jsx}"],
+    languageOptions: {
       globals: globals.browser,
       parserOptions: {
-        ecmaVersion: 'latest',
+        ecmaVersion: 2022,
+        sourceType: "module",
         ecmaFeatures: { jsx: true },
-        sourceType: 'module',
       },
     },
     plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
     },
     rules: {
-      ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'react-refresh/only-export-components': [
-        'warn',
+      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+      "react-refresh/only-export-components": [
+        "warn",
         { allowConstantExport: true },
       ],
     },
   },
-]
+];
